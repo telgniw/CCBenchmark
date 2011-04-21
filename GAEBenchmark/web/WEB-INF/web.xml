@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <servlet>
+        <servlet-name>MyBlob UploadServlet</servlet-name>
+        <servlet-class>benchmark.storage.myblob.UploadServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MyBlob DownloadServlet</servlet-name>
+        <servlet-class>benchmark.storage.myblob.DownloadServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MyBlob InitServlet</servlet-name>
+        <servlet-class>benchmark.storage.myblob.InitServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MyBlob DeleteServlet</servlet-name>
+        <servlet-class>benchmark.storage.myblob.DeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyBlob UploadServlet</servlet-name>
+        <url-pattern>/myblob/upload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MyBlob DownloadServlet</servlet-name>
+        <url-pattern>/myblob/download</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MyBlob InitServlet</servlet-name>
+        <url-pattern>/myblob/init</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MyBlob DeleteServlet</servlet-name>
+        <url-pattern>/myblob/delete</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
