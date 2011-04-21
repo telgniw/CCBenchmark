@@ -10,7 +10,7 @@ host = 'http://yi-testi.appspot.com'
 
 def usage():
     print sys.argv[0], '<init>', '<num>', '<size>', '<b|kb|mb>'
-    print sys.argv[0], '<delete>'
+    print sys.argv[0], '<del>'
     print sys.argv[0], '<up|down>', '<num>', '<seq|para>'
     exit()
 
@@ -43,6 +43,7 @@ def upload(idx):
     curl.setopt(pycurl.POSTFIELDS, urllib.urlencode({
         'id': idx
     }))
+    print 'upload', idx
     curl.perform()
     curl.close()
 
@@ -53,25 +54,16 @@ def download(idx):
     curl.setopt(pycurl.URL, '%s/myblob/download?%s' % (host, urllib.urlencode({
         'id': idx
     })))
+    print 'download', idx
     curl.perform()
     curl.close()
 
-class ThreadUpload(Thread):
-    def __init__(self, idx):
+class ThreadAction(Thread):
+    def __init__(self, idx, action):
         Thread.__init__(self)
-        self.idx = idx
+        self.idx, self.act = idx, action
     def run(self):
-        upload(self.idx)
-        print 'uploading', self.idx
-        time.sleep(0.01)
-
-class ThreadDownload(Thread):
-    def __init__(self, idx):
-        Thread.__init__(self)
-        self.idx = idx
-    def run(self):
-        downlaod(self.idx)
-        print 'downloading', self.idx
+        self.act(self.idx)
         time.sleep(0.01)
 
 class ThreadJoin(Thread):
@@ -91,12 +83,12 @@ def seq(action, n):
     for i in range(n):
         action(n)
 
-def para(threadClass, n):
+def para(action, n):
     li = []
     joiner = ThreadJoin(li, n)
     joiner.start()
     for i in range(n):
-        thread = threadClass(i)
+        thread = ThreadAction(i, action)
         thread.start()
         li.append(thread)
     joiner.join()
@@ -113,23 +105,23 @@ def parse_size(idx):
         return int(sys.argv[idx]) * 1000000
 
 try:
-    if sys.argv[1] != 'delete':
+    if sys.argv[1] != 'del':
         num = parse_num(2)
 
     if sys.argv[1] == 'init':
         size = parse_size(3)
         init(size, num)
-    elif sys.argv[1] == 'delete':
+    elif sys.argv[1] == 'del':
         delete()
-    elif sys.argv[1] == 'upload':
-        if sys.argv[5] == 'seq':
-            seq(upload, n)
+    elif sys.argv[1] == 'up':
+        if sys.argv[3] == 'seq':
+            seq(upload, num)
         else:
-            para(upload, n)
-    elif sys.argv[1] == 'download':
-        if sys.argv[5] == 'seq':
-            seq(download, n)
+            para(upload, num)
+    elif sys.argv[1] == 'down':
+        if sys.argv[3] == 'seq':
+            seq(download, num)
         else:
-            para(download, n)
+            para(download, num)
 except IndexError as ie:
     usage()

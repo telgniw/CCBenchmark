@@ -3,7 +3,7 @@ APP_ENGINE_PATH="/usr/local/lib/appengine-java-sdk-1.4.3"
 APPCFG="$APP_ENGINE_PATH/bin/appcfg.sh"
 APP_PATH="/home/celia/Documents/Git/CCBenchmark/GAEBenchmark/web"
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
     echo "usage: $0 <target>"
     exit
 fi
