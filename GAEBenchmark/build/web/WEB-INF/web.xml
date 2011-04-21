@@ -16,6 +16,10 @@
         <servlet-name>MyBlob DeleteServlet</servlet-name>
         <servlet-class>benchmark.storage.myblob.DeleteServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewTaskServlet</servlet-name>
+        <servlet-class>benchmark.NewTaskServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MyBlob UploadServlet</servlet-name>
         <url-pattern>/myblob/upload</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>MyBlob DeleteServlet</servlet-name>
         <url-pattern>/myblob/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewTaskServlet</servlet-name>
+        <url-pattern>/newtask</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

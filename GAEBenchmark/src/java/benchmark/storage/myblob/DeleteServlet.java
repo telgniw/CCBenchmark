@@ -6,6 +6,7 @@ package benchmark.storage.myblob;
 import benchmark.storage.PMF;
 import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Logger;
 import javax.jdo.Query;
 import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
@@ -14,11 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class DeleteServlet extends HttpServlet {
+    private static final Logger log = Logger.getLogger(DeleteServlet.class.getName());
+
     protected void HandleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             PersistenceManager pm = PMF.getManager();
             Query query = pm.newQuery(MyBlobInfo.class);
             query.deletePersistentAll();
+            log.info("delete SUCCESS");
     }
 
     /** 
