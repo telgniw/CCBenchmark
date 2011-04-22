@@ -21,20 +21,20 @@ $EXEC_TEST init $MAX 1 kb
 
 TYPES[0]="up"
 TYPES[1]="down"
-for TYPE in ${TYPES[*]}; do
-    echo $TYPE start
-    for i in $(seq $((MAX))); do
-        echo idx $i
+for i in $(seq $((MAX))); do
+    for TYPE in ${TYPES[*]}; do
+        echo $TYPE $i
         $EXEC_TEST $TYPE $i para >& /dev/null
         TMP=/tmp/$i.log
         $EXEC_GET_LOG $TMP >& /dev/null
         $EXEC_PARSE $TMP $i $DIR/$i
     done
+    $EXEC_TEST del
 done
 
 TYPES[0]="upload"
 TYPES[1]="download"
 for TYPE in ${TYPES[*]}; do
     cat $DIR/*.$TYPE.log > $DIR/$TYPE.log
-    $EXEC_PLOT $DIR/$TYPE.log 100
+    $EXEC_PLOT $DIR/$TYPE.log 200
 done

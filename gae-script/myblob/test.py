@@ -10,7 +10,7 @@ host = 'http://yi-testi.appspot.com'
 
 def usage():
     print sys.argv[0], '<init>', '<num>', '<size>', '<b|kb|mb>'
-    print sys.argv[0], '<del>'
+    print sys.argv[0], '<del> [task]'
     print sys.argv[0], '<up|down>', '<num>', '<seq|para>'
     exit()
 
@@ -25,13 +25,16 @@ def init(size, n):
     curl.perform()
     curl.close()
 
-def delete():
+def delete(task):
     global host
     curl = pycurl.Curl()
     curl.setopt(pycurl.HTTPGET, 1)
-    curl.setopt(pycurl.URL, '%s/newtask?%s' % (host, urllib.urlencode({
-        'url': '/myblob/delete'
-    })))
+    if task:
+        curl.setopt(pycurl.URL, '%s/newtask?%s' % (host, urllib.urlencode({
+            'url': '/myblob/delete'
+        })))
+    else:
+        curl.setopt(pycurl.URL, '%s/myblob/delete' % (host))
     curl.perform()
     curl.close()
 
@@ -112,7 +115,10 @@ try:
         size = parse_size(3)
         init(size, num)
     elif sys.argv[1] == 'del':
-        delete()
+        if len(sys.argv) > 2:
+            delete(True)
+        else:
+            delete(False)
     elif sys.argv[1] == 'up':
         if sys.argv[3] == 'seq':
             seq(upload, num)

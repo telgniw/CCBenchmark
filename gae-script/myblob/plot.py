@@ -46,12 +46,11 @@ fout.write('%12s: max=%f, min=%f, avg=%f\n' % stat_tuple('t1', t1))
 fout.write('%12s: max=%f, min=%f, avg=%f\n' % stat_tuple('t2', t2))
 
 title(sys.argv[1])
-axis([0, n_data, 0, height])
 plot(t1, color='r')
 plot(t2, color='g')
-ymin, ymax = ylim()
-unit = (ymax - ymin) / 40
-text(0, ymax-unit*1, '%s ~ %s' % (st_time, ed_time))
-text(0, ymax-unit*2, '%2s: max=%f, min=%f, avg=%f' % stat_tuple('t1', t1), color='r')
-text(0, ymax-unit*3, '%2s: max=%f, min=%f, avg=%f' % stat_tuple('t2', t2), color='g')
+axis([0, n_data, 0, height])
+dx, dy = n_data / 128, height / 32
+text(dx, height-dy*2, '%s ~ %s' % (st_time, ed_time))
+text(dx, height-dy*3, '%2s: max=%f, min=%f, avg=%f' % stat_tuple('t1', t1), color='r')
+text(dx, height-dy*4, '%2s: max=%f, min=%f, avg=%f' % stat_tuple('t2', t2), color='g')
 savefig('%s.png' % sys.argv[1], format='png')

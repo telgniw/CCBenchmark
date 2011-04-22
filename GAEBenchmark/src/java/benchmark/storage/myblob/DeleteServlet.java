@@ -51,12 +51,6 @@ public class DeleteServlet extends HttpServlet {
         HandleRequest(request, response);
     }
 
-    private byte[] getRandomBlob(int size) {
-        byte[] obj = new byte[size];
-        new Random().nextBytes(obj);
-        return obj;
-    }
-
     /** 
      * Returns a short description of the servlet.
      * @return a String containing servlet description
