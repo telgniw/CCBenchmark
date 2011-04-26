@@ -3,13 +3,14 @@ EXEC_TEST="./test.py"
 EXEC_GET_LOG="./retrieve_log.sh"
 EXEC_PARSE="./parse_log.sh"
 EXEC_PLOT="./plot.py"
+EXEC_CAL_STAT="./cal-stat.py"
 
-if [ -z "$1" ] || [ -z "$2" ]; then
-    echo "usage: $0 <max> <output_dir>"
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
+    echo "usage: $0 <max> <size> <output_dir>"
     exit
 fi
 
-MAX=$1 DIR=$2
+MAX=$1 SIZE=$2 DIR=$3
 
 if [ -d "$DIR" ]; then
     echo "dir '$DIR' already exists"
@@ -17,7 +18,7 @@ if [ -d "$DIR" ]; then
 fi
 
 mkdir $DIR
-$EXEC_TEST init $MAX 1 kb
+$EXEC_TEST init $MAX $SIZE
 
 TYPES[0]="up"
 TYPES[1]="down"
@@ -37,4 +38,6 @@ TYPES[1]="download"
 for TYPE in ${TYPES[*]}; do
     cat $DIR/*.$TYPE.log > $DIR/$TYPE.log
     $EXEC_PLOT $DIR/$TYPE.log 200
+    LIST=`ls $DIR/*.$TYPE.log`
+    $EXEC_CAL_STAT $DIR/$TYPE.stat 360 $LIST
 done

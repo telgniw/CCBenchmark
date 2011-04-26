@@ -5,6 +5,8 @@ package benchmark.storage.table;
 
 import benchmark.storage.PMF;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
@@ -26,14 +28,20 @@ public class InitServlet extends HttpServlet {
         int num = Integer.parseInt(request.getParameter("num"));
         int size = Integer.parseInt(request.getParameter("size"));
         int seed = Integer.parseInt(request.getParameter("seed"));
-        PersistenceManager pm = PMF.getManager();
+        List<SmallData> list = new ArrayList<SmallData>(num);
         for(int i=0; i<num; i++) {
             byte[] bytes = getRandomBytes(seed, size);
-            pm.makePersistent(new SmallData(new String(bytes)));
+            list.add(new SmallData(new String(bytes)));
+        }
+        PersistenceManager pm = PMF.getManager();
+        try {
+            pm.makePersistentAll(list);
+        } finally {
+            pm.close();
         }
     }
 
-    private byte[] getRandomBytes(int seed, int size) {
+    public static byte[] getRandomBytes(int seed, int size) {
         byte[] obj = new byte[size];
         new Random(seed).nextBytes(obj);
         return obj;

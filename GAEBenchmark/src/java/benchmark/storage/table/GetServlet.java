@@ -3,9 +3,11 @@
  */
 package benchmark.storage.table;
 
+import benchmark.storage.ActionStatus;
 import benchmark.storage.PMF;
 import java.io.IOException;
-import java.util.Random;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jdo.Query;
 import javax.jdo.PersistenceManager;
@@ -19,7 +21,32 @@ public class GetServlet extends HttpServlet {
 
     protected void HandleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ActionStatus status = ActionStatus.FAILED;
+        long t1 = System.currentTimeMillis();
+        int size = Integer.parseInt(request.getParameter("size"));
         int seed = Integer.parseInt(request.getParameter("seed"));
+        byte[] bytes = InitServlet.getRandomBytes(seed, size);
+        String str = new String(bytes);
+        PersistenceManager pm = PMF.getManager();
+        try {
+            Query query = pm.newQuery(SmallData.class);
+            query.setFilter("data == str");
+            query.declareParameters("String str");
+            long t2 = System.currentTimeMillis();
+            List<SmallData> list = (List<SmallData>) query.execute(str);
+            long t3 = System.currentTimeMillis();
+            if(list.isEmpty() || list.get(0).getData().equals(str) == false)
+                status = ActionStatus.FAILED;
+            else
+                status = ActionStatus.SUCCESS;
+            log.log(Level.INFO, "table get {0} {1} {2} {3}", new Object[]{
+                status, seed, t3-t1, t3-t2
+            });
+            response.setStatus((status == ActionStatus.SUCCESS)?
+                HttpServletResponse.SC_FOUND : HttpServletResponse.SC_NOT_FOUND);
+        } finally {
+            pm.close();
+        }
     }
 
     /** 
@@ -46,12 +73,6 @@ public class GetServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HandleRequest(request, response);
-    }
-
-    private byte[] getRandomBytes(int seed, int size) {
-        byte[] obj = new byte[size];
-        new Random(seed).nextBytes(obj);
-        return obj;
     }
 
     /** 

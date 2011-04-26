@@ -14,11 +14,35 @@
     </servlet>
     <servlet>
         <servlet-name>MyBlob DeleteServlet</servlet-name>
-        <servlet-class>benchmark.storage.myblob.DeleteServlet</servlet-class>
+        <servlet-class>benchmark.storage.myblob.DeleteAllServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NewTaskServlet</servlet-name>
         <servlet-class>benchmark.NewTaskServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table InitServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.InitServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table GetServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.GetServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table PutServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.PutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table QueryServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.QueryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table DelServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.DeleteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table DeleteServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.DeleteAllServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MyBlob UploadServlet</servlet-name>
@@ -39,6 +63,30 @@
     <servlet-mapping>
         <servlet-name>NewTaskServlet</servlet-name>
         <url-pattern>/newtask</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table InitServlet</servlet-name>
+        <url-pattern>/table/init</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table GetServlet</servlet-name>
+        <url-pattern>/table/get</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table PutServlet</servlet-name>
+        <url-pattern>/table/put</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table QueryServlet</servlet-name>
+        <url-pattern>/table/query</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table DelServlet</servlet-name>
+        <url-pattern>/table/del</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table DeleteServlet</servlet-name>
+        <url-pattern>/table/delete</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
