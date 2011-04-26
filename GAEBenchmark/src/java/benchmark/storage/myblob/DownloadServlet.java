@@ -48,8 +48,8 @@ public class DownloadServlet extends HttpServlet {
             query.declareParameters("String blobName");
             List<MyBlobInfo> list = (List<MyBlobInfo>) query.execute(name);
             MyBlobInfo blobInfo = list.get(0);
-            Blob blob = blobInfo.getBlob();
             long t2 = System.currentTimeMillis();
+            Blob blob = blobInfo.getBlob();
             response.setStatus(HttpServletResponse.SC_FOUND);
             long t3 = System.currentTimeMillis();
             log.log(Level.INFO, "myblob download {0} {1} {2} {3}", new Object[]{
