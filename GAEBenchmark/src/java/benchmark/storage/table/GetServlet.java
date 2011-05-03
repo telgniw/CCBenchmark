@@ -25,8 +25,7 @@ public class GetServlet extends HttpServlet {
         long t1 = System.currentTimeMillis();
         int size = Integer.parseInt(request.getParameter("size"));
         int seed = Integer.parseInt(request.getParameter("seed"));
-        byte[] bytes = InitServlet.getRandomBytes(seed, size);
-        String str = new String(bytes);
+        String str = InitServlet.getRandomString(seed, size);
         PersistenceManager pm = PMF.getManager();
         try {
             Query query = pm.newQuery(SmallData.class);

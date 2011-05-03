@@ -24,12 +24,11 @@ public class PutServlet extends HttpServlet {
         int seed = Integer.parseInt(request.getParameter("seed"));
         PersistenceManager pm = PMF.getManager();
         try {
-            byte[] bytes = InitServlet.getRandomBytes(seed, size);
-            SmallData data = new SmallData(new String(bytes));
+            SmallData data = new SmallData(InitServlet.getRandomString(seed, size));
             long t2 = System.currentTimeMillis();
             pm.makePersistent(data);
             long t3 = System.currentTimeMillis();
-            log.log(Level.INFO, "table get {0} {1} {2} {3}", new Object[]{
+            log.log(Level.INFO, "table put {0} {1} {2} {3}", new Object[]{
                 ActionStatus.SUCCESS, seed, t3-t1, t3-t2
             });
         } finally {

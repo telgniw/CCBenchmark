@@ -20,19 +20,20 @@ public class DeleteServlet extends HttpServlet {
 
     protected void HandleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int num = Integer.parseInt(request.getParameter("num"));
         int size = Integer.parseInt(request.getParameter("size"));
         int seed = Integer.parseInt(request.getParameter("seed"));
-        byte[] bytes = InitServlet.getRandomBytes(seed, size);
-        String str = new String(bytes);
+        String str = InitServlet.getRandomString(seed, size);
         PersistenceManager pm = PMF.getManager();
         try {
             Query query = pm.newQuery(SmallData.class);
             query.setFilter("data == str");
             query.declareParameters("String str");
             List<SmallData> list = (List<SmallData>) query.execute(str);
-            int num = list.size();
-            log.log(Level.INFO, "delete success {0}", num);
-            pm.deletePersistentAll(list);
+            if(num > list.size())
+                num = list.size();
+            pm.deletePersistentAll(list.subList(0, num));
+            log.log(Level.INFO, "delete SUCCESS {0}", num);
         } finally {
             pm.close();
         }

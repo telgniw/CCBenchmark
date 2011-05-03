@@ -18,7 +18,7 @@ if [ -d "$DIR" ]; then
 fi
 
 mkdir $DIR
-$EXEC_TEST init $MAX $SIZE
+$EXEC_TEST init $MAX $SIZE b
 
 TYPES[0]="up"
 TYPES[1]="down"
@@ -37,7 +37,7 @@ TYPES[0]="upload"
 TYPES[1]="download"
 for TYPE in ${TYPES[*]}; do
     cat $DIR/*.$TYPE.log > $DIR/$TYPE.log
-    $EXEC_PLOT $DIR/$TYPE.log 200
+    $EXEC_PLOT $DIR/$TYPE.log 200 $SIZE
     LIST=`ls $DIR/*.$TYPE.log`
     $EXEC_CAL_STAT $DIR/$TYPE.stat 360 $LIST
 done

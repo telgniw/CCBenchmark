@@ -25,8 +25,7 @@ public class QueryServlet extends HttpServlet {
         PersistenceManager pm = PMF.getManager();
         int size = Integer.parseInt(request.getParameter("size"));
         int seed = Integer.parseInt(request.getParameter("seed"));
-        byte[] bytes = InitServlet.getRandomBytes(seed, size);
-        String str = new String(bytes);
+        String str = InitServlet.getRandomString(seed, size);
         try {
             Query query = pm.newQuery(SmallData.class);
             query.setFilter("data == str");
@@ -36,7 +35,7 @@ public class QueryServlet extends HttpServlet {
             for(int i=0; i<list.size(); i++)
                 list.get(i);
             long t3 = System.currentTimeMillis();
-            log.log(Level.INFO, "table get {0} {1} {2} {3}", new Object[]{
+            log.log(Level.INFO, "table query {0} {1} {2} {3}", new Object[]{
                 ActionStatus.SUCCESS, list.size(), t3-t1, t3-t2
             });
         } finally {

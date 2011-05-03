@@ -46,8 +46,8 @@ public class UploadServlet extends HttpServlet {
             Blob blob = new Blob(obj);
             pm.makePersistent(new MyBlobInfo(name, "text/plain", obj.length, blob));
             long t3 = System.currentTimeMillis();
-            log.log(Level.INFO, "myblob upload {0} {1} {2} {3}", new Object[]{
-                ActionStatus.SUCCESS, name, t3-t1, t3-t2
+            log.log(Level.INFO, "myblob upload {0} {1} {2} {3} {4} {5}", new Object[]{
+                ActionStatus.SUCCESS, name, t3-t1, t3-t2, t1, t3
             });
         } finally {
             pm.close();
