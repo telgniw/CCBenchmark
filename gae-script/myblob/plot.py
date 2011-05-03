@@ -51,7 +51,7 @@ fout.write('%12s: %s\n' % ('end', ed_time))
 fout.write('%12s: %d\n' % ('# data', n_data))
 fout.write('%12s: max=%f, min=%f, avg=%f\n' % stat_tuple('t1', t1))
 fout.write('%12s: max=%f, min=%f, avg=%f\n' % stat_tuple('t2', t2))
-fout.write('%12s: %fbytes\n' % ('total size', int(total_size)))
+fout.write('%12s: %dbytes\n' % ('total size', total_size))
 fout.write('%12s: %dms\n' % ('duration', int(duration)))
 fout.write('%12s: %fbytes/s\n' % (
     'throughput', total_size*1000/duration))

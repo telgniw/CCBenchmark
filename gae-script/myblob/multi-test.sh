@@ -37,7 +37,7 @@ TYPES[0]="upload"
 TYPES[1]="download"
 for TYPE in ${TYPES[*]}; do
     cat $DIR/*.$TYPE.log > $DIR/$TYPE.log
-    $EXEC_PLOT $DIR/$TYPE.log 200 $SIZE
+    $EXEC_PLOT $DIR/$TYPE.log 100 $SIZE
     LIST=`ls $DIR/*.$TYPE.log`
-    $EXEC_CAL_STAT $DIR/$TYPE.stat 360 $LIST
+    $EXEC_CAL_STAT $DIR/$TYPE.stat 150 $SIZE $LIST
 done

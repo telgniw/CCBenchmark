@@ -7,7 +7,7 @@ import sys
 from pylab import *
 
 def usage():
-    print sys.argv[0], '<output>', '<height>', '<input>..'
+    print sys.argv[0], '<output>', '<height>', '<size>', '<input>..'
     exit()
 
 def error(msg):
@@ -17,13 +17,18 @@ def error(msg):
 def warning(msg):
     print 'warning: %s' % msg
 
-if len(sys.argv) <= 3:
+if len(sys.argv) <= 4:
     usage()
 
 fout = open(sys.argv[1], 'w')
+n_data, height = len(sys.argv)-3, int(sys.argv[2])
+data_size = int(sys.argv[3])
 
-max_li, min_li, avg_li = [], [], []
-for name in sys.argv[3:]:
+def to_float(s):
+    return float(''.join(s.split(',')))
+
+max_li, min_li, avg_li, thr = [], [], [], []
+for name in sys.argv[4:]:
     try:
         fin = open(name, 'r')
         lines = fin.readlines()
@@ -32,23 +37,28 @@ for name in sys.argv[3:]:
         warning('file does not exist %s' % name)
     n_data = len(lines) >> 1
     data = [lines[(i<<1)+1] for i in range(n_data)]
-    t1, t2 = [], []
+    t1, t2, st, ed = [], [], [], []
     for i in range(n_data):
         tmp = data[i].split()
         t1.append(float(tmp[4])), t2.append(float(tmp[5]))
+        st.append(to_float(tmp[6])), ed.append(to_float(tmp[7]))
     max_li.append((max(t1), max(t2))), min_li.append((min(t1), min(t2)))
     avg_li.append((sum(t1)/len(t1), sum(t2)/len(t2)))
+    duration, total_size = max(ed)-min(st), data_size*n_data
+    throughput = total_size/duration*1000
+    thr.append(throughput)
     fout.write('%8s(t1) max=%f, min=%f, avg=%f\n' % (
-        name, max_li[-1][0], min_li[-1][0], avg_li[-1][0]
-    ))
+        name, max_li[-1][0], min_li[-1][0], avg_li[-1][0]))
     fout.write('%8s(t2) max=%f, min=%f, avg=%f\n' % (
-        name, max_li[-1][1], min_li[-1][1], avg_li[-1][1]
-    ))
+        name, max_li[-1][1], min_li[-1][1], avg_li[-1][1]))
+    fout.write('%8s(duration) %dms\n' % (name, duration))
+    fout.write('%8s(total size) %dbytes\n' % (name, total_size))
+    fout.write('%8s(throughput) %fbytes/s\n' % (
+        name, throughput))
 
 fout.close()
 
-n_data, height = len(sys.argv)-3, int(sys.argv[2])
-
+clf()
 title(sys.argv[1])
 max_li = zip(*max_li)
 plot(max_li[0], color='r')
@@ -68,3 +78,8 @@ text(0, height-dy*4, 'min(t2)', color='c')
 text(0, height-dy*5, 'avg(t1)', color='y')
 text(0, height-dy*6, 'avg(t2)', color='m')
 savefig('%s.png' % sys.argv[1], format='png')
+
+clf()
+title(sys.argv[1] + ':throughput')
+plot(thr, color='k')
+savefig('%s.throughput.png' % sys.argv[1], format='png')

@@ -16,18 +16,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.memcache.MemcacheService;
-import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 /**
  */
 public class DownloadServlet extends HttpServlet {
     private static final Logger log = Logger.getLogger(DownloadServlet.class.getName());
-    private static final MemcacheService memcache;
-
-    static {
-        memcache = MemcacheServiceFactory.getMemcacheService("myblob-simulate");
-    }
    
     /** 
      * Handles the HTTP <code>GET</code> method.
