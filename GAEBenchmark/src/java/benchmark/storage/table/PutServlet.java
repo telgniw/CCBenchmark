@@ -68,6 +68,6 @@ public class PutServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "GAEBenchmark Table Insert";
+        return "GAEBenchmark Table Put";
     }
 }

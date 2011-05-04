@@ -80,6 +80,6 @@ public class GetServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "GAEBenchmark Table Delete";
+        return "GAEBenchmark Table Get";
     }
 }

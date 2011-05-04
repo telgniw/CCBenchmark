@@ -65,7 +65,6 @@ public class InitServlet extends HttpServlet {
             tmp = (String) memcache.get(key);
         if(tmp == null || tmp.length() != size) {
             StringBuilder sb = new StringBuilder();
-            sb.append(seed);
             while(sb.length() < size) {
                 sb.append('#');
             }

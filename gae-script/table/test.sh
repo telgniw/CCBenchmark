@@ -18,6 +18,7 @@ if [ "$1" == "init" ]; then
     else
         $EXEC_WGET "$URL_PREFIX/table/$1?seed=$2&size=$3&num=$4&max=$5"
     fi
+    exit
 elif [ "$1" == "del" ]; then
     if [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]; then
         usage; fi

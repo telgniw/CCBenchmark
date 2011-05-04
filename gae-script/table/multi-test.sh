@@ -1,4 +1,5 @@
 #!/bin/bash
+TMP_DIR="/tmp"
 EXEC_TEST="./test.sh"
 EXEC_GET_LOG="./retrieve_log.sh"
 EXEC_PARSE="./parse_log.sh"
@@ -26,7 +27,7 @@ mkdir $DIR
 # init 1
 echo "init(1)"
 for i in $(seq $((MAX))); do
-    if [ "$((i % 10))" == "0" ]; then
+    if [ "$(((i-1) % 10))" == "0" ]; then
         $EXEC_TEST init $i $SIZE 1 10
     fi
 done
@@ -39,7 +40,7 @@ for i in {1..100}; do
     for j in {1..10}; do
         $EXEC_TEST get $t $SIZE
     done
-    TMP=/tmp/$i.log
+    TMP=$TMP_DIR/$i.log
     $EXEC_GET_LOG $TMP >& /dev/null
     $EXEC_PARSE $TMP 10 $DIR/$i get
 done
@@ -47,8 +48,8 @@ done
 # init 9
 echo "init(9)"
 for i in $(seq $((MAX))); do
-    if [ "$((i % 10))" == "0" ]; then
-        $EXEC_TEST init $i $SIZE 1 10
+    if [ "$(((i-1) % 10))" == "0" ]; then
+        $EXEC_TEST init $i $SIZE 9 10
     fi
 done
 
@@ -60,13 +61,13 @@ for i in {1..100}; do
     for j in {1..10}; do
         $EXEC_TEST query $t $SIZE
     done
-    TMP=/tmp/$i.log
+    TMP=$TMP_DIR/$i.log
     $EXEC_GET_LOG $TMP >& /dev/null
     $EXEC_PARSE $TMP 10 $DIR/$i query
 done
 
 # delete all
-$EXEC_TEST delete task
+# $EXEC_TEST delete task
 
 echo "plot get"
 TYPE=get
