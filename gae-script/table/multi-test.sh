@@ -41,7 +41,7 @@ for i in {1..100}; do
     done
     TMP=/tmp/$i.log
     $EXEC_GET_LOG $TMP >& /dev/null
-    $EXEC_PARSE $TMP 10 $DIR/$i
+    $EXEC_PARSE $TMP 10 $DIR/$i get
 done
 
 # init 9
@@ -62,7 +62,7 @@ for i in {1..100}; do
     done
     TMP=/tmp/$i.log
     $EXEC_GET_LOG $TMP >& /dev/null
-    $EXEC_PARSE $TMP 10 $DIR/$i
+    $EXEC_PARSE $TMP 10 $DIR/$i query
 done
 
 # delete all
