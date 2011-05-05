@@ -3,7 +3,7 @@
 #################################################
 # Plot graph for logs.
 #################################################
-import sys
+import sys, re
 from pylab import *
 
 def usage():
@@ -35,8 +35,17 @@ for name in sys.argv[4:]:
         fin.close()
     except IOError as ie:
         warning('file does not exist %s' % name)
-    n_data = len(lines) >> 1
-    data = [lines[(i<<1)+1] for i in range(n_data)]
+    n_data, data, tmp = 0, [], ''
+    for line in lines:
+        if re.match('^\[.*\]$', line) is not None:
+            tmp = line
+        else:
+            if not tmp:
+                continue
+            data.append(line)
+            n_data, tmp = n_data+1, ''
+    if n_data == 0:
+        continue
     t1, t2, st, ed = [], [], [], []
     for i in range(n_data):
         tmp = data[i].split()
