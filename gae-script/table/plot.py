@@ -3,7 +3,7 @@
 #################################################
 # Plot graph for logs.
 #################################################
-import sys
+import sys, re
 from pylab import *
 
 def usage():
@@ -24,8 +24,15 @@ except IndexError as ie:
 except IOError as ie:
     error('file does not exists')
 
-n_data = len(lines) >> 1
-data = [(lines[i<<1], lines[(i<<1)+1]) for i in range(n_data)]
+n_data, data, tmp = 0, [], ''
+for line in lines:
+    if re.match('^\[.*\]$', line) is not None:
+        tmp = line
+    else:
+        if not tmp:
+            continue
+        data.append((tmp, line))
+        n_data, tmp = n_data+1, ''
 data.sort()
 
 def stat_tuple(name, li):

@@ -67,7 +67,7 @@ for i in {1..100}; do
 done
 
 # delete all
-# $EXEC_TEST delete task
+$EXEC_TEST delete task
 
 echo "plot get"
 TYPE=get
