@@ -7,7 +7,7 @@ import sys, re
 from pylab import *
 
 def usage():
-    print sys.argv[0], '<input>', '<height>', '<size>'
+    print sys.argv[0], '<input>', '<height>'
     exit()
 
 def error(msg):
@@ -19,7 +19,6 @@ try:
     lines = fin.readlines()
     fin.close()
     height = int(sys.argv[2])
-    data_size = int(sys.argv[3])
 except IndexError as ie:
     usage()
 except IOError as ie:
@@ -43,13 +42,10 @@ def stat_tuple(name, li):
     return (name, max(li), min(li), sum(li)/len(li))
 
 st_time, ed_time = data[0][0][:-1], data[-1][0][:-1]
-t1, t2, st, ed = [], [], [], []
+t1, t2, = [], []
 for i in range(n_data):
     tmp = data[i][1].split()
     t1.append(float(tmp[4])), t2.append(float(tmp[5]))
-    st.append(to_float(tmp[6])), ed.append(to_float(tmp[7]))
-
-duration, total_size = max(ed)-min(st), data_size*n_data
 
 fout = open('%s.stat' % sys.argv[1], 'w')
 fout.write('%12s: %s\n' % ('file', sys.argv[1]))
@@ -58,12 +54,9 @@ fout.write('%12s: %s\n' % ('end', ed_time))
 fout.write('%12s: %d\n' % ('# data', n_data))
 fout.write('%12s: max=%f, min=%f, avg=%f\n' % stat_tuple('t1', t1))
 fout.write('%12s: max=%f, min=%f, avg=%f\n' % stat_tuple('t2', t2))
-fout.write('%12s: %dbytes\n' % ('total size', total_size))
-fout.write('%12s: %dms\n' % ('duration', int(duration)))
-fout.write('%12s: %fbytes/s\n' % (
-    'throughput', total_size*1000/duration))
 
-title(sys.argv[1])
+clf()
+gcf().set_size_inches(8, 6)
 plot(t1, color='r')
 plot(t2, color='g')
 axis([0, n_data-1, 0, height])
@@ -71,4 +64,5 @@ dx, dy = n_data / 128, height / 32
 text(dx, height-dy*2, '%s ~ %s' % (st_time, ed_time))
 text(dx, height-dy*3, '%2s: max=%f, min=%f, avg=%f' % stat_tuple('t1', t1), color='r')
 text(dx, height-dy*4, '%2s: max=%f, min=%f, avg=%f' % stat_tuple('t2', t2), color='g')
-savefig('%s.png' % sys.argv[1], format='png')
+title(sys.argv[1])
+savefig('%s.png' % sys.argv[1], format='png', bbox_inches='tight')

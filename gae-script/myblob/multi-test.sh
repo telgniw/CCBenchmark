@@ -23,6 +23,9 @@ $EXEC_TEST init $MAX $SIZE b
 TYPES[0]="up"
 TYPES[1]="down"
 for i in $(seq $((MAX))); do
+    if [ "$((i % 10))" != "0" ]; then
+        continue
+    fi
     for TYPE in ${TYPES[*]}; do
         echo $TYPE $i
         $EXEC_TEST $TYPE $i para >& /dev/null
@@ -37,7 +40,7 @@ TYPES[0]="upload"
 TYPES[1]="download"
 for TYPE in ${TYPES[*]}; do
     cat $DIR/*.$TYPE.log > $DIR/$TYPE.log
-    $EXEC_PLOT $DIR/$TYPE.log 100 $SIZE
+    $EXEC_PLOT $DIR/$TYPE.log 100
     LIST=`ls $DIR/*.$TYPE.log`
-    $EXEC_CAL_STAT $DIR/$TYPE.stat 150 $SIZE $LIST
+    $EXEC_CAL_STAT $DIR/$TYPE.stat 150 $LIST
 done

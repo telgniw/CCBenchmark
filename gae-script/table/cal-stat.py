@@ -20,10 +20,17 @@ def warning(msg):
 if len(sys.argv) <= 3:
     usage()
 
+def my_cmp(l, r):
+    l, r = l.split('/')[-1].split('.')[0], r.split('/')[-1].split('.')[0]
+    return cmp(int(l), int(r))
+
+file_list = sys.argv[3:]
+file_list.sort(my_cmp)
+
 fout = open(sys.argv[1], 'w')
 
 max_li, min_li, avg_li = [], [], []
-for name in sys.argv[3:]:
+for j, name in enumerate(file_list):
     try:
         fin = open(name, 'r')
         lines = fin.readlines()
@@ -58,6 +65,8 @@ fout.close()
 
 n_data, height = len(sys.argv)-3, int(sys.argv[2])
 
+clf()
+gcf().set_size_inches(8, 6)
 title(sys.argv[1])
 max_li = zip(*max_li)
 plot(max_li[0], color='r')
@@ -76,4 +85,4 @@ text(0, height-dy*3, 'min(t1)', color='b')
 text(0, height-dy*4, 'min(t2)', color='c')
 text(0, height-dy*5, 'avg(t1)', color='y')
 text(0, height-dy*6, 'avg(t2)', color='m')
-savefig('%s.png' % sys.argv[1], format='png')
+savefig('%s.png' % sys.argv[1], format='png', bbox_inches='tight')
