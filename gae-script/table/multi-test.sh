@@ -34,7 +34,7 @@ done
 
 # get 1
 echo "get(1)"
-for i in {1..100}; do
+for i in {1..10}; do
     t=$((RANDOM % MAX))
     echo "get $t"
     for j in {1..10}; do
@@ -43,6 +43,20 @@ for i in {1..100}; do
     TMP=$TMP_DIR/$i.log
     $EXEC_GET_LOG $TMP >& /dev/null
     $EXEC_PARSE $TMP 10 $DIR/$i get
+done
+
+# put 1
+echo "put(1)"
+for i in {1..10}; do
+    t=$((RANDOM % MAX))
+    echo "put $t"
+    for j in {1..10}; do
+        $EXEC_TEST put $t $SIZE
+    done
+    TMP=$TMP_DIR/$i.log
+    $EXEC_GET_LOG $TMP >& /dev/null
+    $EXEC_PARSE $TMP 10 $DIR/$i put
+    $EXEC_TEST del $t $size 10
 done
 
 # init 9
@@ -55,7 +69,7 @@ done
 
 # query 10
 echo "query(10)"
-for i in {1..100}; do
+for i in {1..10}; do
     t=$((RANDOM % MAX))
     echo "query $t"
     for j in {1..10}; do
@@ -71,6 +85,13 @@ $EXEC_TEST delete task
 
 echo "plot get"
 TYPE=get
+cat $DIR/*.$TYPE.log > $DIR/$TYPE.log
+$EXEC_PLOT $DIR/$TYPE.log 20
+LIST=`ls $DIR/*.$TYPE.log`
+$EXEC_CAL_STAT $DIR/$TYPE.stat 20 $LIST
+
+echo "plot put"
+TYPE=put
 cat $DIR/*.$TYPE.log > $DIR/$TYPE.log
 $EXEC_PLOT $DIR/$TYPE.log 20
 LIST=`ls $DIR/*.$TYPE.log`

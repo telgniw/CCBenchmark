@@ -66,7 +66,7 @@ for j, name in enumerate(file_list):
     li = [1/(ed[i]-st[i]) for i in range(n_data)]
     dev = (sum([t*t for t in li])/len(li)-((sum(li)/len(li))**2))**0.5
     plot([j, j], [n_data/duration-dev, n_data/duration+dev], marker='_',
-        markersize=10, color='c')
+        markersize=10, color='m')
     max_li.append((max(t1), max(t2))), min_li.append((min(t1), min(t2)))
     avg_li.append((sum(t1)/len(t1), sum(t2)/len(t2)))
     throughput.append(n_data/duration)
@@ -84,9 +84,10 @@ fout.write('%12s max=%f, min=%f, avg=%f, dev=%f\n' % ('throughput',
     max(throughput), min(throughput), avg_throughput, dev_throughput))
 
 fout.close()
-plot(throughput, color='b', linewidth=2)
 
 n_data, height = len(sys.argv)-3, int(sys.argv[2])
+
+plot(throughput, color='b', linewidth=2)
 
 ax2 = axes(r, frameon=False)
 ax2.xaxis.tick_top(), ax2.yaxis.tick_left()
