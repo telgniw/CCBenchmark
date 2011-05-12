@@ -56,7 +56,7 @@ for i in {1..10}; do
     TMP=$TMP_DIR/$i.log
     $EXEC_GET_LOG $TMP >& /dev/null
     $EXEC_PARSE $TMP 10 $DIR/$i put
-    $EXEC_TEST del $t $size 10
+    $EXEC_TEST del $t $SIZE 10
 done
 
 # init 9
@@ -93,9 +93,9 @@ $EXEC_CAL_STAT $DIR/$TYPE.stat 20 $LIST
 echo "plot put"
 TYPE=put
 cat $DIR/*.$TYPE.log > $DIR/$TYPE.log
-$EXEC_PLOT $DIR/$TYPE.log 20
+$EXEC_PLOT $DIR/$TYPE.log 100
 LIST=`ls $DIR/*.$TYPE.log`
-$EXEC_CAL_STAT $DIR/$TYPE.stat 20 $LIST
+$EXEC_CAL_STAT $DIR/$TYPE.stat 100 $LIST
 
 echo "plot query"
 TYPE=query
