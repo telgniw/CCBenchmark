@@ -24,15 +24,7 @@ public class InitServlet extends HttpServlet {
         memcache = MemcacheServiceFactory.getMemcacheService("table");
     }
 
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void HandleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int max = Integer.parseInt(request.getParameter("max"));
         int num = Integer.parseInt(request.getParameter("num"));
@@ -54,6 +46,32 @@ public class InitServlet extends HttpServlet {
         response.getWriter().format("table init %s MAX(%d) NUM(%d) SIZE(%d) SEED(%d)", new Object[]{
             ActionStatus.SUCCESS, max, num, size, seed
         });
+    }
+
+    /** 
+     * Handles the HTTP <code>GET</code> method.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HandleRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HandleRequest(request, response);
     }
 
     public static String getRandomString(int seed, int size) {

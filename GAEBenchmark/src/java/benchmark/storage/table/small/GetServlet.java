@@ -7,8 +7,6 @@ import benchmark.storage.ActionStatus;
 import benchmark.storage.PMF;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.jdo.Query;
 import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
@@ -17,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class GetServlet extends HttpServlet {
-    private static final Logger log = Logger.getLogger(GetServlet.class.getName());
-
     protected void HandleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ActionStatus status = ActionStatus.FAILED;
