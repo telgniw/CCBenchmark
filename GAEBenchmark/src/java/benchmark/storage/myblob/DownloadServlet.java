@@ -7,8 +7,6 @@ import benchmark.storage.ActionStatus;
 import benchmark.storage.PMF;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.jdo.Query;
 import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
@@ -20,8 +18,6 @@ import com.google.appengine.api.datastore.Blob;
 /**
  */
 public class DownloadServlet extends HttpServlet {
-    private static final Logger log = Logger.getLogger(DownloadServlet.class.getName());
-   
     /** 
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -45,12 +41,13 @@ public class DownloadServlet extends HttpServlet {
             Blob blob = blobInfo.getBlob();
             response.setStatus(HttpServletResponse.SC_FOUND);
             long t3 = System.currentTimeMillis();
-            log.log(Level.INFO, "myblob download {0} {1} {2} {3} {4} {5}", new Object[]{
-                ActionStatus.SUCCESS, name, t3-t1, t2-t1, t1, t3
+            response.getWriter().format("myblob download %s %d %d %d", new Object[]{
+                ActionStatus.SUCCESS, t1, t2, t3
             });
         } catch(ArrayIndexOutOfBoundsException e) {
-            log.log(Level.INFO, "myblob download {0}", ActionStatus.FAILED);
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().format("myblob download %s", new Object[]{
+                ActionStatus.FAILED
+            });
         } finally {
             query.closeAll();
             pm.close();

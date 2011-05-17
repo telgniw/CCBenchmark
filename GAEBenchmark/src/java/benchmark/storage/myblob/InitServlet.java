@@ -3,6 +3,7 @@
  */
 package benchmark.storage.myblob;
 
+import benchmark.storage.ActionStatus;
 import java.io.IOException;
 import java.util.Random;
 import javax.servlet.ServletException;
@@ -43,6 +44,9 @@ public class InitServlet extends HttpServlet {
                 memcache.put(objName, blob, Expiration.byDeltaSeconds(3600));
             }
         }
+        response.getWriter().format("myblob init %s NUM(%d) SIZE(%d)", new Object[]{
+            ActionStatus.SUCCESS, num, size
+        });
     }
 
     private byte[] getRandomBlob(int size) {

@@ -21,28 +21,56 @@
         <servlet-class>benchmark.NewTaskServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Table InitServlet</servlet-name>
-        <servlet-class>benchmark.storage.table.InitServlet</servlet-class>
+        <servlet-name>Table Small InitServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.small.InitServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Table GetServlet</servlet-name>
-        <servlet-class>benchmark.storage.table.GetServlet</servlet-class>
+        <servlet-name>Table Small GetServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.small.GetServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Table PutServlet</servlet-name>
-        <servlet-class>benchmark.storage.table.PutServlet</servlet-class>
+        <servlet-name>Table Small PutServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.small.PutServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Table QueryServlet</servlet-name>
-        <servlet-class>benchmark.storage.table.QueryServlet</servlet-class>
+        <servlet-name>Table Small QueryServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.small.QueryServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Table DelServlet</servlet-name>
-        <servlet-class>benchmark.storage.table.DeleteServlet</servlet-class>
+        <servlet-name>Table Small DelServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.small.DeleteServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Table DeleteServlet</servlet-name>
-        <servlet-class>benchmark.storage.table.DeleteAllServlet</servlet-class>
+        <servlet-name>Table Small DeleteServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.small.DeleteAllServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table Medium InitServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.medium.InitServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table Medium GetServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.medium.GetServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table Medium PutServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.medium.PutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table Medium QueryServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.medium.QueryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table Medium DelServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.medium.DeleteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table Medium DeleteServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.medium.DeleteAllServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Table Medium QueryLongServlet</servlet-name>
+        <servlet-class>benchmark.storage.table.medium.QueryLongServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MyBlob UploadServlet</servlet-name>
@@ -65,28 +93,56 @@
         <url-pattern>/newtask</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Table InitServlet</servlet-name>
-        <url-pattern>/table/init</url-pattern>
+        <servlet-name>Table Small InitServlet</servlet-name>
+        <url-pattern>/table/small/init</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Table GetServlet</servlet-name>
-        <url-pattern>/table/get</url-pattern>
+        <servlet-name>Table Small GetServlet</servlet-name>
+        <url-pattern>/table/small/get</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Table PutServlet</servlet-name>
-        <url-pattern>/table/put</url-pattern>
+        <servlet-name>Table Small PutServlet</servlet-name>
+        <url-pattern>/table/small/put</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Table QueryServlet</servlet-name>
-        <url-pattern>/table/query</url-pattern>
+        <servlet-name>Table Small QueryServlet</servlet-name>
+        <url-pattern>/table/small/query</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Table DelServlet</servlet-name>
-        <url-pattern>/table/del</url-pattern>
+        <servlet-name>Table Small DelServlet</servlet-name>
+        <url-pattern>/table/small/del</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Table DeleteServlet</servlet-name>
-        <url-pattern>/table/delete</url-pattern>
+        <servlet-name>Table Small DeleteServlet</servlet-name>
+        <url-pattern>/table/small/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table Medium InitServlet</servlet-name>
+        <url-pattern>/table/medium/init</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table Medium GetServlet</servlet-name>
+        <url-pattern>/table/medium/get</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table Medium PutServlet</servlet-name>
+        <url-pattern>/table/medium/put</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table Medium QueryServlet</servlet-name>
+        <url-pattern>/table/medium/query</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table Medium DelServlet</servlet-name>
+        <url-pattern>/table/medium/del</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table Medium DeleteServlet</servlet-name>
+        <url-pattern>/table/medium/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Table Medium QueryLongServlet</servlet-name>
+        <url-pattern>/table/medium/queryl</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -1,7 +1,7 @@
 /**
  * @author Yi Huang (Celia)
  */
-package benchmark.storage.myblob;
+package benchmark.storage.table.small;
 
 import benchmark.storage.ActionStatus;
 import benchmark.storage.PMF;
@@ -17,9 +17,9 @@ public class DeleteAllServlet extends HttpServlet {
     protected void HandleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             PersistenceManager pm = PMF.getManager();
-            Query query = pm.newQuery(MyBlobInfo.class);
+            Query query = pm.newQuery(SmallData.class);
             query.deletePersistentAll();
-            response.getWriter().format("myblob deleteAll %s", new Object[]{
+            response.getWriter().format("table deleteAll %s", new Object[]{
                 ActionStatus.SUCCESS
             });
     }
@@ -56,6 +56,6 @@ public class DeleteAllServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "GAEBenchmark MyBlob SimDelete";
+        return "GAEBenchmark Table Delete";
     }
 }

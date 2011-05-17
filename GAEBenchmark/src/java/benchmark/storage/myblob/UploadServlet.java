@@ -6,8 +6,6 @@ package benchmark.storage.myblob;
 import benchmark.storage.ActionStatus;
 import benchmark.storage.PMF;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +18,6 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 /**
  */
 public class UploadServlet extends HttpServlet {
-    private static final Logger log = Logger.getLogger(UploadServlet.class.getName());
     private static final MemcacheService memcache;
 
     static {
@@ -46,13 +43,13 @@ public class UploadServlet extends HttpServlet {
             Blob blob = new Blob(obj);
             pm.makePersistent(new MyBlobInfo(name, "text/plain", obj.length, blob));
             long t3 = System.currentTimeMillis();
-            log.log(Level.INFO, "myblob upload {0} {1} {2} {3} {4} {5}", new Object[]{
-                ActionStatus.SUCCESS, name, t3-t1, t3-t2, t1, t3
+            response.getWriter().format("myblob upload %s %d %d %d", new Object[]{
+                ActionStatus.SUCCESS, name, t1, t2, t3
             });
+            return;
         } finally {
             pm.close();
         }
-        response.sendRedirect("/myblob");
     }
     
     /** 
