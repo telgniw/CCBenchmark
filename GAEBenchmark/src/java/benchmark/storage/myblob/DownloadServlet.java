@@ -33,8 +33,8 @@ public class DownloadServlet extends HttpServlet {
             Blob blob = blobInfo.getBlob();
             response.setStatus(HttpServletResponse.SC_FOUND);
             long t3 = System.currentTimeMillis();
-            response.getWriter().format("myblob download %s %d %d %d", new Object[]{
-                ActionStatus.SUCCESS, t1, t2, t3
+            response.getWriter().format("myblob download %s %s %d %d %d", new Object[]{
+                ActionStatus.SUCCESS, name, t1, t2, t3
             });
         } catch(ArrayIndexOutOfBoundsException e) {
             response.getWriter().format("myblob download %s", new Object[]{
