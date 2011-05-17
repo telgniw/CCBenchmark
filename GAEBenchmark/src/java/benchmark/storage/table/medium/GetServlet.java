@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.datastore.Text;
 
 public class GetServlet extends HttpServlet {
     protected void HandleRequest(HttpServletRequest request, HttpServletResponse response)
@@ -21,16 +22,16 @@ public class GetServlet extends HttpServlet {
         long t1 = System.currentTimeMillis();
         int size = Integer.parseInt(request.getParameter("size"));
         int seed = Integer.parseInt(request.getParameter("seed"));
-        String str = InitServlet.getRandomString(seed, size);
+        Text text = new Text(InitServlet.getRandomString(seed, size));
         PersistenceManager pm = PMF.getManager();
         try {
             Query query = pm.newQuery(MediumData.class);
-            query.setFilter("data == str");
-            query.declareParameters("String str");
+            query.setFilter("data == text");
+            query.declareParameters("Text text");
             long t2 = System.currentTimeMillis();
-            List<MediumData> list = (List<MediumData>) query.execute(str);
+            List<MediumData> list = (List<MediumData>) query.execute(text);
             long t3 = System.currentTimeMillis();
-            if(list.isEmpty() || list.get(0).getData().equals(str) == false)
+            if(list.isEmpty() || list.get(0).getData().equals(text) == false)
                 response.getWriter().format("table get %s", new Object[]{
                     ActionStatus.FAILED
                 });
