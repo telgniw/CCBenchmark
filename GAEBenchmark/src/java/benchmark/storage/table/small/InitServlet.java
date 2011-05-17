@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
@@ -34,7 +33,7 @@ public class InitServlet extends HttpServlet {
         for(int i=0; i<max; i++) {
             String str = getRandomString(seed+i, size);
             for(int j=0; j<num; j++) {
-                list.add(new SmallData(new Text(str)));
+                list.add(new SmallData(str));
             }
         }
         PersistenceManager pm = PMF.getManager();

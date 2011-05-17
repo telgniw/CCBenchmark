@@ -8,7 +8,6 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.Text;
 
 /**
  */
@@ -19,17 +18,17 @@ public class MediumData {
     private Key key;
     
     @Persistent
-    private Text data;
+    private String data;
 
     @Persistent
     private Long serial;
 
-    public MediumData(Text data, Long serial) {
+    public MediumData(String data, Long serial) {
         this.data = data;
         this.serial = serial;
     }
 
-    public Text getData() {
+    public String getData() {
         return data;
     }
 

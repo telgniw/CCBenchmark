@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.appengine.api.datastore.Text;
 
 public class QueryServlet extends HttpServlet {
     protected void HandleRequest(HttpServletRequest request, HttpServletResponse response)
@@ -22,13 +21,13 @@ public class QueryServlet extends HttpServlet {
         PersistenceManager pm = PMF.getManager();
         int size = Integer.parseInt(request.getParameter("size"));
         int seed = Integer.parseInt(request.getParameter("seed"));
-        Text text = new Text(InitServlet.getRandomString(seed, size));
+        String str = InitServlet.getRandomString(seed, size);
         try {
             Query query = pm.newQuery(MediumData.class);
-            query.setFilter("data == text");
-            query.declareParameters("Text text");
+            query.setFilter("data == str");
+            query.declareParameters("String str");
             long t2 = System.currentTimeMillis();
-            List<MediumData> list = (List<MediumData>) query.execute(text);
+            List<MediumData> list = (List<MediumData>) query.execute(str);
             for(int i=0; i<list.size(); i++)
                 list.get(i);
             long t3 = System.currentTimeMillis();

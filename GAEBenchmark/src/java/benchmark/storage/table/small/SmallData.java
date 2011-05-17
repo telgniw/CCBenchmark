@@ -8,7 +8,6 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.Text;
 
 /**
  */
@@ -19,13 +18,13 @@ public class SmallData {
     private Key key;
     
     @Persistent
-    private Text data;
+    private String data;
 
-    public SmallData(Text data) {
+    public SmallData(String data) {
         this.data = data;
     }
 
-    public Text getData() {
+    public String getData() {
         return data;
     }
 }

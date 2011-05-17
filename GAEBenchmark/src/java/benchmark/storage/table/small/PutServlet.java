@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.appengine.api.datastore.Text;
 
 public class PutServlet extends HttpServlet {
     protected void HandleRequest(HttpServletRequest request, HttpServletResponse response)
@@ -21,8 +20,7 @@ public class PutServlet extends HttpServlet {
         int seed = Integer.parseInt(request.getParameter("seed"));
         PersistenceManager pm = PMF.getManager();
         try {
-            SmallData data = new SmallData(new Text(
-                    InitServlet.getRandomString(seed, size)));
+            SmallData data = new SmallData(InitServlet.getRandomString(seed, size));
             long t2 = System.currentTimeMillis();
             pm.makePersistent(data);
             long t3 = System.currentTimeMillis();
