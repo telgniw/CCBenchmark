@@ -38,6 +38,7 @@ class MyProcess(Process):
 
         global queue
         queue.put(buf.getvalue())
+        buf.close()
 
     @staticmethod
     def get():
