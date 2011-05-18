@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-from multiprocessing import Process
+from multiprocessing import Process, Queue
+from StringIO import StringIO
 import pycurl, urllib
 
+queue = Queue()
 host = 'http://yi-testi.appspot.com'
 
 class MyProcess(Process):
@@ -30,5 +32,14 @@ class MyProcess(Process):
         self.curl.close()
 
     def _func_(self):
+        buf = StringIO()
+        self.curl.setopt(pycurl.WRITEFUNCTION, buf.write)
         self.curl.perform()
+
+        global queue
+        queue.put(buf.getvalue())
+
+    @staticmethod
+    def get():
+        return queue.get()
 
