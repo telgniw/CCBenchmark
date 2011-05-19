@@ -1,15 +1,15 @@
 #!/usr/bin/env python
-from common import MyProcess
+from common import ThreadAction 
 
 def init(num, size):
-    return MyProcess(url='/myblob/init', args={'num': num, 'size': size})
+    return ThreadAction(url='/myblob/init', args={'num': num, 'size': size})
 
 def upload(id):
-    return MyProcess(url='/myblob/upload', args={'id': id})
+    return ThreadAction(url='/myblob/upload', args={'id': id})
 
 def download(id):
-    return MyProcess(url='/myblob/download', args={'id': id})
+    return ThreadAction(url='/myblob/download', args={'id': id})
 
 def deleteAll():
-    return MyProcess(url='/myblob/delete')
+    return ThreadAction(url='/myblob/delete')
 

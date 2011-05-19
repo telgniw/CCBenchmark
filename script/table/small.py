@@ -1,26 +1,26 @@
 #!/usr/bin/env python
-from common import MyProcess
+from common import ThreadAction 
 
 def init(max, num, size, seed):
-    return MyProcess(url='/table/small/init', args={
+    return ThreadAction(url='/table/small/init', args={
         'max': max, 'num': num, 'size': size, 'seed': seed})
 
 def get(size, seed):
-    return MyProcess(url='/table/small/get', args={
+    return ThreadAction(url='/table/small/get', args={
         'size': size, 'seed': seed})
 
 def put(size, seed):
-    return MyProcess(url='/table/small/put', args={
+    return ThreadAction(url='/table/small/put', args={
         'size': size, 'seed': seed})
 
 def delete(num, size, seed):
-    return MyProcess(url='/table/small/del', args={
+    return ThreadAction(url='/table/small/del', args={
         'num': num, 'size': size, 'seed': seed})
 
 def query(size, seed):
-    return MyProcess(url='/table/small/query', args={
+    return ThreadAction(url='/table/small/query', args={
         'size': size, 'seed': seed})
 
 def deleteAll():
-    return MyProcess(url='/table/small/delete')
+    return ThreadAction(url='/table/small/delete')
 
