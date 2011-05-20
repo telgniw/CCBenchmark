@@ -3,7 +3,7 @@ from common import Logger
 import myblob, sys, os
 
 def usage():
-    print sys.argv[0], '<log_dir>', '<num>', '<size>', '<offset>'
+    print sys.argv[0], '<log_dir>', '<num>', '<size>', '<off_t>', '<repeat>'
     exit(1)
 
 def error(msg):
@@ -13,7 +13,7 @@ def error(msg):
 #=================== parse argv begin ===================#
 try:
     log_dir = sys.argv[1]
-    num, size, offset = [int(t) for t in sys.argv[2:]]
+    num, size, off_t, repeat = [int(t) for t in sys.argv[2:]]
     os.mkdir(log_dir)
 except OSError as e:
     error(e)
@@ -47,11 +47,12 @@ if not run(myblob.init, (num, size)):
     error('init failed')
 
 
-for i in range(offset, num+1, offset):
+for i in range(off_t, num+1, off_t):
     print 'i =', i
-    run_multi(myblob.upload, 'upload')
-    run_multi(myblob.download, 'download')
-    if not run(myblob.deleteAll):
-        error('delete failed')
+    for j in range(repeat):
+        run_multi(myblob.upload, '%d.upload' % j)
+        run_multi(myblob.download, '%d.download' % j)
+        if not run(myblob.deleteAll):
+            error('delete failed')
 #======================= test end =======================#
 
