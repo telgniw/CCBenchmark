@@ -54,11 +54,13 @@ class Logger(object):
     """
         A simple logger.
     """
-    def __init__(self, strm=sys.stderr):
+    def __init__(self, strm=sys.stderr, listed=False):
         """
             Initialize logger output stream.
         """
-        self.out = strm
+        self.out, self.listed = strm, listed
+        if self.listed:
+            self.log_list = []
 
     def __del__(self):
         """
@@ -70,10 +72,15 @@ class Logger(object):
         """
             Automatically add a newline after log message.
         """
+        if self.listed:
+            self.log_list.append(msg)
         self.out.write(msg)
         self.out.write('\n')
 
     def time(self):
         self.out.write('###%s###' % datetime.now())
         self.out.write('\n')
+
+    def get(self):
+        return self.log_list
 

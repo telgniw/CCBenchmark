@@ -6,19 +6,30 @@ def usage():
     print sys.argv[0], '<log_dir>', '<num>', '<size>', '<offset>'
     exit(1)
 
+def error(msg):
+    print 'Error:', msg
+    exit(1)
+
 try:
-    log_dir, num, size, offset = [int(t) for t in sys.argv[1:]]
-except ValueError:
+    log_dir = sys.argv[1]
+    num, size, offset = [int(t) for t in sys.argv[2:]]
+    os.mkdir(log_dir)
+except OSError as e:
+    error(e)
+except (ValueError, IndexError):
     usage()
 
 def run(func, args=()):
     t = func(*args)
     t.start()
     t.join()
-    print t.get()
+    res = t.get()
+    print res
+    return 'SUCCESS' in res
 
 def run_multi(func, name):
-    log = Logger(strm=open(os.path.join(log_dir, '%d.%s.log' % (i, name))))
+    log_name = os.path.join(log_dir, '%d.%s.log' % (i, name))
+    log = Logger(strm=open(log_name, 'w'))
     li = []
     for j in range(i):
         li.append(func(j))
@@ -28,11 +39,16 @@ def run_multi(func, name):
         li[j].join()
         log.log(li[j].get())
     del log
+    return log_name
 
-run(myblob.init, (num, size))
+if not run(myblob.init, (num, size)):
+    error('init failed')
 
-for i in range(0, num, offset):
-    run_multi(myblob.upload, 'upload')
-    run_multi(myblob.download, 'download')
-    run(myblob.deleteAll)
+upload_log, download_log = [], []
+for i in range(offset, num+1, offset):
+    print 'i =', i
+    upload_log += run_multi(myblob.upload, 'upload')
+    download_log += run_multi(myblob.download, 'download')
+    if not run(myblob.deleteAll):
+        error('delete failed')
 
