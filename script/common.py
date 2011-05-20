@@ -2,7 +2,7 @@
 from datetime import datetime
 from threading import Thread
 from StringIO import StringIO
-import pycurl, urllib, sys
+import pycurl, urllib, sys, time
 
 host = 'http://yi-testi.appspot.com'
 
@@ -27,29 +27,28 @@ class ThreadAction(Thread):
         else:
             self.curl.setopt(pycurl.URL, '%s%s' % (host, url))
 
-        self.response = None
+        self.buf = StringIO()
+        self.curl.setopt(pycurl.WRITEFUNCTION, self.buf.write)
 
     def __del__(self):
         """
             Close the cURL object.
         """
+        self.buf.close()
         self.curl.close()
 
     def run(self):
         """
-            Run the cURL and store the response message.
+            Run the cURL object.
         """
-        buf = StringIO()
-        self.curl.setopt(pycurl.WRITEFUNCTION, buf.write)
         self.curl.perform()
-        self.response = buf.getvalue()
-        buf.close()
+        time.sleep(0.01)
 
     def get(self):
         """
             Return the response message.
         """
-        return self.response
+        return self.buf.getvalue()
 
 class Logger(object):
     """
@@ -72,5 +71,9 @@ class Logger(object):
             Automatically add a newline after log message.
         """
         self.out.write(msg)
+        self.out.write('\n')
+
+    def time(self):
+        self.out.write('###%s###' % datetime.now())
         self.out.write('\n')
 
