@@ -4,6 +4,10 @@ from threading import Thread
 from StringIO import StringIO
 import pycurl, urllib, sys, time
 
+def error(msg):
+    print 'Error:', msg
+    exit(1)
+
 host = 'http://yi-testi.appspot.com'
 
 class ThreadAction(Thread):
@@ -83,4 +87,12 @@ class Logger(object):
 
     def get(self):
         return self.log_list
+
+def run(func, args=()):
+    t = func(*args)
+    t.start()
+    t.join()
+    res = t.get()
+    print res
+    return 'SUCCESS' in res
 

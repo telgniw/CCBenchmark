@@ -1,13 +1,9 @@
 #!/usr/bin/env python
-from common import Logger
+from common import Logger, error, run
 import myblob, sys, os
 
 def usage():
     print sys.argv[0], '<log_dir>', '<num>', '<size>', '<off_t>', '<repeat>'
-    exit(1)
-
-def error(msg):
-    print 'Error:', msg
     exit(1)
 
 #=================== parse argv begin ===================#
@@ -21,15 +17,7 @@ except (ValueError, IndexError):
     usage()
 #==================== parse argv end ====================#
 
-def run(func, args=()):
-    t = func(*args)
-    t.start()
-    t.join()
-    res = t.get()
-    print res
-    return 'SUCCESS' in res
-
-def run_multi(func, name):
+def run_multi(func, name, i):
     log_name = os.path.join(log_dir, '%d.%s.log' % (i, name))
     log = Logger(strm=open(log_name, 'w'))
     li = []
@@ -46,13 +34,12 @@ def run_multi(func, name):
 if not run(myblob.init, (num, size)):
     error('init failed')
 
-
 for i in range(off_t, num+1, off_t):
     print 'i =', i
     for j in range(repeat):
-        run_multi(myblob.upload, '%d.upload' % j)
-        run_multi(myblob.download, '%d.download' % j)
+        run_multi(myblob.upload, '%d.upload' % j, i)
+        run_multi(myblob.download, '%d.download' % j, i)
         if not run(myblob.deleteAll):
-            error('delete failed')
+            error('deleteAll failed')
 #======================= test end =======================#
 
