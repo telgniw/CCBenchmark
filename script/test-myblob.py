@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from common import Logger
+from pylab import *
 import myblob, sys, os
 
 def usage():
@@ -29,7 +30,7 @@ def run(func, args=()):
 
 def run_multi(func, name):
     log_name = os.path.join(log_dir, '%d.%s.log' % (i, name))
-    log = Logger(strm=open(log_name, 'w'))
+    log = Logger(strm=open(log_name, 'w'), listed=True)
     li = []
     for j in range(i):
         li.append(func(j))
@@ -38,17 +39,32 @@ def run_multi(func, name):
     for j in range(i):
         li[j].join()
         log.log(li[j].get())
-    del log
-    return log_name
+    return log.get()
 
+#====================== test begin ======================#
 if not run(myblob.init, (num, size)):
     error('init failed')
 
 upload_log, download_log = [], []
+
 for i in range(offset, num+1, offset):
     print 'i =', i
     upload_log += run_multi(myblob.upload, 'upload')
     download_log += run_multi(myblob.download, 'download')
     if not run(myblob.deleteAll):
         error('delete failed')
+#======================  test end  ======================#
+
+def parse_log(log_list):
+    log_list = [map(int, t.split()[-3:]) for t in log_list]
+    min_st = min(log_list)[0]
+    duration = [(t[-1]-t[0], t[-1]-t[1]) for t in log_list]
+    interval = [(t[0]-min_st, t[-1]-min_st) for t in log_list]
+    return duration, interval
+
+#====================== plot begin ======================#
+gcf().set_size_inches(16, 6)
+
+
+#======================  plot end  ======================#
 
