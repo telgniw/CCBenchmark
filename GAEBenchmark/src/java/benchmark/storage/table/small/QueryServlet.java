@@ -31,8 +31,8 @@ public class QueryServlet extends HttpServlet {
             for(int i=0; i<list.size(); i++)
                 list.get(i);
             long t3 = System.currentTimeMillis();
-            response.getWriter().format("table query %s %d %d %d", new Object[]{
-                ActionStatus.SUCCESS, t1, t2, t3
+            response.getWriter().format("table.small query %s SEED(%d) %d %d %d", new Object[]{
+                ActionStatus.SUCCESS, seed, t1, t2, t3
             });
         } finally {
             pm.close();

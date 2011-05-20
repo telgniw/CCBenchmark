@@ -23,8 +23,8 @@ public class DownloadServlet extends HttpServlet {
         long t1 = System.currentTimeMillis();
         PersistenceManager pm = PMF.getManager();
         Query query = pm.newQuery(MyBlobInfo.class);
+        String name = InitServlet.getCachedObjName(request.getParameter("id"));
         try {
-            String name = InitServlet.getCachedObjName(request.getParameter("id"));
             query.setFilter("name == blobName");
             query.declareParameters("String blobName");
             List<MyBlobInfo> list = (List<MyBlobInfo>) query.execute(name);
@@ -37,8 +37,8 @@ public class DownloadServlet extends HttpServlet {
                 ActionStatus.SUCCESS, name, t1, t2, t3
             });
         } catch(ArrayIndexOutOfBoundsException e) {
-            response.getWriter().format("myblob download %s", new Object[]{
-                ActionStatus.FAILED
+            response.getWriter().format("myblob download %s %s", new Object[]{
+                ActionStatus.FAILED, name
             });
         } finally {
             query.closeAll();

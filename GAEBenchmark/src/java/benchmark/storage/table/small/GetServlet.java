@@ -31,13 +31,13 @@ public class GetServlet extends HttpServlet {
             List<SmallData> list = (List<SmallData>) query.execute(str);
             long t3 = System.currentTimeMillis();
             if(list.isEmpty()) {
-                response.getWriter().format("table get %s", new Object[]{
-                    ActionStatus.FAILED
+                response.getWriter().format("table.small get %s SEED(%d)", new Object[]{
+                    ActionStatus.FAILED, seed
                 });
             } else {
                 list.get(0);
-                response.getWriter().format("table get %s %d %d %d", new Object[]{
-                    ActionStatus.SUCCESS, t1, t2, t3
+                response.getWriter().format("table.small get %s SEED(%d) %d %d %d", new Object[]{
+                    ActionStatus.SUCCESS, seed, t1, t2, t3
                 });
             }
         } finally {

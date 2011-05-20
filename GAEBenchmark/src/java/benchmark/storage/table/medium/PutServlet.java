@@ -24,8 +24,8 @@ public class PutServlet extends HttpServlet {
             long t2 = System.currentTimeMillis();
             pm.makePersistent(data);
             long t3 = System.currentTimeMillis();
-            response.getWriter().format("table put %s %d %d %d", new Object[]{
-                ActionStatus.SUCCESS, t1, t2, t3
+            response.getWriter().format("table.medium put %s SEED(%d) %d %d %d", new Object[]{
+                ActionStatus.SUCCESS, seed, t1, t2, t3
             });
         } finally {
             pm.close();
