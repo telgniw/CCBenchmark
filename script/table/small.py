@@ -21,6 +21,6 @@ def query(size, seed):
     return ThreadAction(url='/table/small/query', args={
         'size': size, 'seed': seed})
 
-def deleteAll():
-    return ThreadAction(url='/table/small/delete')
+def deleteAll(task=False):
+    return ThreadAction(url='/table/small/delete', task=task)
 

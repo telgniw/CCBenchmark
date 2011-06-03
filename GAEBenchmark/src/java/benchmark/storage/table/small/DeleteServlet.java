@@ -30,7 +30,7 @@ public class DeleteServlet extends HttpServlet {
             if(num > list.size())
                 num = list.size();
             pm.deletePersistentAll(list.subList(0, num));
-            response.getWriter().format("table.medium delete %s SEED(%d)", new Object[]{
+            response.getWriter().format("table.small delete %s SEED(%d)", new Object[]{
                 ActionStatus.SUCCESS, seed
             });
         } finally {

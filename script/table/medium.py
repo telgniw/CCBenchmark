@@ -25,6 +25,6 @@ def queryl(size, seed):
     return ThreadAction(url='/table/medium/queryl', args={
         'size': size, 'seed': seed})
 
-def deleteAll():
-    return ThreadAction(url='/table/medium/delete')
+def deleteAll(task=False):
+    return ThreadAction(url='/table/medium/delete', task=task)
 

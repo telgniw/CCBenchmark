@@ -10,6 +10,6 @@ def upload(id):
 def download(id):
     return ThreadAction(url='/myblob/download', args={'id': id})
 
-def deleteAll():
-    return ThreadAction(url='/myblob/delete')
+def deleteAll(task=False):
+    return ThreadAction(url='/myblob/delete', task=task)
 

@@ -19,7 +19,7 @@ public class DeleteAllServlet extends HttpServlet {
             PersistenceManager pm = PMF.getManager();
             Query query = pm.newQuery(SmallData.class);
             query.deletePersistentAll();
-            response.getWriter().format("table deleteAll %s", new Object[]{
+            response.getWriter().format("table.small deleteAll %s", new Object[]{
                 ActionStatus.SUCCESS
             });
     }
