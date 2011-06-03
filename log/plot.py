@@ -83,17 +83,24 @@ def plot_throughput(d, files, key, all_data):
     gcf().clf()
     gcf().set_size_inches(8, 6)
 
-    throu = []
+    total, throu = 0, []
     for i, num in enumerate(files):
         li = []
         for data in all_data[i]:
             t = zip(*data)
             li.append((max(t[2])-min(t[0]))/len(data))
+        r = range(total, total+len(li), 1)
+        b0 = bar(r, li, color='m')
+        total += len(li)
         throu.append(avg(li))
-    plot(throu, color='m')
-
     n_nums, nums = len(files), files.keys()
-    xticks(arange(n_nums), nums)
+    width = float(total) / n_nums
+
+    r, t = arange(n_nums+1)*width, throu + [0]
+    plot(r, t, color='r', drawstyle='steps-post')
+
+    r = arange(n_nums)*width
+    xticks(r+width*.5, nums)
     xlabel('# data %sed concurrently' % key)
     ylabel('average time per data')
 
