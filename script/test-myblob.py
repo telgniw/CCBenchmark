@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from common import Logger, error, run
+from time import sleep
 import myblob, sys, os
 
 def usage():
@@ -31,15 +32,22 @@ def run_multi(func, name, i):
     del log
 
 #====================== test begin ======================#
-if not run(myblob.init, (num, size)):
+task = True
+
+if not run(myblob.init, tuple(num, size, task)):
+    run(myblob.deleteAll, tuple(task))
     error('init failed')
+if task:
+    sleep(600)
 
 for i in range(off_t, num+1, off_t):
     print 'i =', i
     for j in range(repeat):
         run_multi(myblob.upload, '%d.upload' % j, i)
         run_multi(myblob.download, '%d.download' % j, i)
-        if not run(myblob.deleteAll):
+        if not run(myblob.deleteAll, tuple(task)):
             error('deleteAll failed')
+        if task:
+            sleep(600)
 #======================= test end =======================#
 

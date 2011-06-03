@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 from common import ThreadAction 
 
-def init(max, num, size, seed):
+def init(max, num, size, seed, task=False):
     return ThreadAction(url='/table/small/init', args={
-        'max': max, 'num': num, 'size': size, 'seed': seed})
+        'max': max, 'num': num, 'size': size, 'seed': seed}, task=task)
 
 def get(size, seed):
     return ThreadAction(url='/table/small/get', args={

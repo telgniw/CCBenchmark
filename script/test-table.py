@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from common import Logger, error, run
+from time import sleep
 import sys, os, random
 
 def usage():
@@ -35,31 +36,42 @@ def run_multi(func, args, name, i, repeat):
     del log
 
 #====================== test begin ======================#
+task = True
 seed_list = [random.choice(range(num)) for t in range(n_tests)]
 
 print '1st phase (get, put)'
 for i in range(off_t, num+1, off_t):
-    if not run(table.init, (i, 1, size, 0)):
+    if not run(table.init, tuple(i, 1, size, 0, task)):
+        run(table.deleteAll, tuple(task))
         error('init failed')
+    if task:
+        sleep(600)
 
 for i, seed in enumerate(seed_list):
     print 'i =', i, ', seed =', seed
-    run_multi(table.get, (size, seed), 'get', i, repeat)
-    run_multi(table.put, (size, seed), 'put', i, repeat)
-    if not run(table.delete, (repeat, size, seed)):
-        run(table.deleteAll)
+    run_multi(table.get, tuple(size, seed), 'get', i, repeat)
+    run_multi(table.put, tuple(size, seed), 'put', i, repeat)
+    if not run(table.delete, tuple(repeat, size, seed)):
+        run(table.deleteAll, tuple(task))
         error('delete failed')
+    if task:
+        sleep(600)
 
 print '2nd phase (query)'
 for i in range(off_t, num+1, off_t):
-    if not run(table.init, (i, 9, size, 0)):
+    if not run(table.init, tuple(i, 9, size, 0, task)):
+        run(table.deleteAll, tuple(task))
         error('init failed')
+    if task:
+        sleep(600)
 
 for i, seed in enumerate(seed_list):
     print 'i =', i, ', seed =', seed
-    run_multi(table.query, (size, seed), 'query', i, repeat)
+    run_multi(table.query, tuple(size, seed), 'query', i, repeat)
 
 if not run(table.deleteAll):
     error('deleteAll failed')
+if task:
+    sleep(600)
 #======================= test end =======================#
 
