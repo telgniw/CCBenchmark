@@ -40,12 +40,9 @@ def parse(d, files, key):
             dic[num] = []
         dic[num].append(f)
 
-    gcf().clf()
-    gcf().set_size_inches(8, 6)
-
-    total, colors = 0, [['c', 'y'], ['b', 'g']]
+    all_data = []
     for i, num in enumerate(dic):
-        li = []
+        all_data.append([])
         for f in dic[num]:
             with open(os.path.join(d, f)) as fin:
                 lines = fin.readlines()
@@ -54,6 +51,17 @@ def parse(d, files, key):
             except ValueError as e:
                 print '%s:' % os.path.join(d, f), e
                 continue
+            all_data[-1].append(data)
+    return all_data, dic
+
+def plot_latency(d, files, key, all_data):
+    gcf().clf()
+    gcf().set_size_inches(8, 6)
+
+    total, colors = 0, [['c', 'y'], ['b', 'g']]
+    for i, num in enumerate(files):
+        li = []
+        for data in all_data[i]:
             datb = map(expand, data)
             t = zip(*datb)
             li.append([avg(t[0]), dev(t[0]), avg(t[1]), dev(t[1])])
@@ -61,14 +69,35 @@ def parse(d, files, key):
         b0 = bar(r, t[0], color=colors[i%2][0])
         b1 = bar(r, t[2], color=colors[i%2][1], bottom=t[0])
         total += len(li)
-
-    n_nums, nums = len(dic), dic.keys()
+    n_nums, nums = len(files), files.keys()
     width = float(total) / n_nums
     xticks(arange(n_nums)*width + width*.5, nums)
     xlabel('# data %sed concurrently' % key)
     ylabel('average latency')
     
-    output = os.path.join(d, '%s.stat.png' % key)
+    output = os.path.join(d, '%s.latency.stat.png' % key)
+    title(output)
+    savefig(output, format='PNG')
+
+def plot_throughput(d, files, key, all_data):
+    gcf().clf()
+    gcf().set_size_inches(8, 6)
+
+    throu = []
+    for i, num in enumerate(files):
+        li = []
+        for data in all_data[i]:
+            t = zip(*data)
+            li.append((max(t[2])-min(t[0]))/len(data))
+        throu.append(avg(li))
+    plot(throu, color='m')
+
+    n_nums, nums = len(files), files.keys()
+    xticks(arange(n_nums), nums)
+    xlabel('# data %sed concurrently' % key)
+    ylabel('average time per data')
+
+    output = os.path.join(d, '%s.throughput.stat.png' % key)
     title(output)
     savefig(output, format='PNG')
 
@@ -91,5 +120,7 @@ for d in dirs:
         dic[key].append(f)
     for key in dic:
         dic[key].sort(fname_cmp)
-        parse(d, dic[key], key)
+        data, files = parse(d, dic[key], key)
+        plot_latency(d, files, key, data)
+        plot_throughput(d, files, key, data)
 #==================== parse data end ====================#
