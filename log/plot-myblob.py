@@ -1,13 +1,10 @@
 #!/usr/bin/env python
+from common import *
 from pylab import *
 import sys, os
 
 def usage():
     print sys.argv[0], '<log_dir>'
-    exit(1)
-
-def error(msg):
-    print 'Error:', msg
     exit(1)
 
 #=================== parse argv begin ===================#
@@ -19,15 +16,6 @@ except OSError as e:
 except ValueError:
     usage()
 #==================== parse argv end ====================#
-
-def fname_cmp(a, b):
-    return cmp(map(int, a.split('.')[:2]), map(int, b.split('.')[:2]))
-
-def avg(li):
-    return float(sum(li))/len(li)
-
-def dev(li):
-    return (avg([t**2 for t in li]) - avg(li)**2)**0.5
 
 def parse(d, files, key):
     dic = {}
