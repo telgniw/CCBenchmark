@@ -4,14 +4,14 @@ from time import sleep
 import sys, os, random
 
 def usage():
-    print sys.argv[0], '<log_dir>', '<type>', '<num>', '<size>'
+    print sys.argv[0], '<log_dir>', '<type>', '<num>', '<size>', '<repeat>'
     exit(1)
 
 #=================== parse argv begin ===================#
 try:
     log_dir, data_type = sys.argv[1], sys.argv[2]
     table = __import__('table.%s' % data_type, fromlist=['table'])
-    num, size = [int(t) for t in sys.argv[3:]]
+    num, size, repeat = [int(t) for t in sys.argv[3:]]
     os.mkdir(log_dir)
 except (OSError, ImportError) as e:
     error(e)
@@ -20,7 +20,7 @@ except (ValueError, IndexError):
 #==================== parse argv end ====================#
 
 # number of data query returns
-repeat = 10
+n_data = 10
 
 def run_multi(func, args, name, i, repeat):
     log_name = os.path.join(log_dir, '%d.%s.log' % (i, name))
@@ -35,23 +35,21 @@ def run_multi(func, args, name, i, repeat):
 #====================== test begin ======================#
 task = True
 
-print '1st phase (get, put)'
-for i in range(num):
-    print 'i =', i
-    run_multi(table.put, (size, i), 'put', i, repeat)
+for j in range(repeat):
+    print '1st phase (get, put)'
+    for i in range(num):
+        print 'i =', i
+        run_multi(table.put, (size, i), '%d.put' % j, i, n_data)
+        run_multi(table.get, (size, i), '%d.get' % j, i, n_data)
 
-for i in range(num):
-    print 'i =', i
-    run_multi(table.get, (size, i), 'get', i, repeat)
+    print '2nd phase (query)'
+    for i in range(num):
+        print 'i =', i
+        run_multi(table.query, (size, i), '%d.query' % j, i, n_data)
 
-print '2nd phase (query)'
-for i in range(num):
-    print 'i =', i
-    run_multi(table.query, (size, i), 'query', i, repeat)
-
-if not run(table.deleteAll):
-    error('deleteAll failed')
-if task:
-    sleep(1800)
+    if not run(table.deleteAll):
+        error('deleteAll failed')
+    if task:
+        sleep(1800)
 #======================= test end =======================#
 

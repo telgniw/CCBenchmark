@@ -141,6 +141,8 @@ os.chdir(log_dir)
 
 dic = {}
 for d in dirs:
+    if not 'myblob' in d:
+        continue
     for dummy, dummy, files in os.walk(d):
         break
     for f in files:
