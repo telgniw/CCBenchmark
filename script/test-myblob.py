@@ -34,7 +34,7 @@ def run_multi(func, name, i):
 #====================== test begin ======================#
 task = True
 
-if not run(myblob.init, tuple(num, size, task)):
+if not run(myblob.init, (num, size, task)):
     run(myblob.deleteAll, tuple(task))
     error('init failed')
 if task:
