@@ -35,7 +35,7 @@ def run_multi(func, name, i):
 task = True
 
 if not run(myblob.init, (num, size, task)):
-    run(myblob.deleteAll, tuple(task))
+    run(myblob.deleteAll, (task,))
     error('init failed')
 if task:
     sleep(600)
@@ -45,9 +45,9 @@ for i in range(off_t, num+1, off_t):
     for j in range(repeat):
         run_multi(myblob.upload, '%d.upload' % j, i)
         run_multi(myblob.download, '%d.download' % j, i)
-        if not run(myblob.deleteAll, tuple(task)):
+        if not run(myblob.deleteAll, (task,)):
             error('deleteAll failed')
         if task:
-            sleep(600)
+            sleep(1800)
 #======================= test end =======================#
 

@@ -40,48 +40,28 @@ def parse(d, files, key):
     return all_data, dic
 
 def plot_latency(d, files, key, all_data):
-    gcf().clf()
-    gcf().set_size_inches(8, 6)
-
-    def expand(d):
-        return [d[1]-d[0], d[2]-d[1]]
-
-    total = 0
-    for i, num in enumerate(files):
-        li = []
-        for data in all_data[i]:
-            datb = map(expand, data)
-            t = zip(*datb)
-            li.append([avg(t[0]), dev(t[0]), avg(t[1]), dev(t[1])])
-        t, r = zip(*li), range(total, total+len(li), 1)
-        bar(r, t[0], color='b')
-        bar(r, t[2], color='c', bottom=t[0], yerr=t[3], ecolor='r')
-        total += len(li)
-    xlabel('test # (%s)' % key)
-    ylabel('average latency (ms)')
-    ylim(ymin=0)
-
-    output = os.path.join(d, '%s.latency.stat.png' % key)
-    title(output)
-    savefig(output, format='PNG')
-
-def plot_latency_each(d, files, key, all_data):
     def expand(d):
         return [d[1]-d[0], d[2]-d[1]]
 
     for i, num in enumerate(files):
         gcf().clf()
-        gcf().set_size_inches(8, 6)
+        gcf().set_size_inches(16, 6)
 
-        total = 0
+        li = []
         for data in all_data[i]:
             datb = map(expand, data)
-            t, r = zip(*datb), range(total, total+len(data), 1)
-            bar(r, t[0], color='b')
-            bar(r, t[1], color='c', bottom=t[0])
-            total += len(data)
+            li += datb
+        t, r = zip(*li), range(len(li))
+        b0 = bar(r, t[0], color='b', linewidth=0)
+        b1 = bar(r, t[1], color='c', bottom=t[0], linewidth=0)
+
+        legend((b0[0], b1[0]), (
+            't0~t1: avg=%.0f dev=%.0f' % (avg(t[0]), dev(t[0])),
+            't1~t2: avg=%.0f dev=%.0f' % (avg(t[1]), dev(t[1]))
+        ))
         xlabel('cumulative # data (%s)' % key)
         ylabel('latency (ms)')
+        ylim(ymin=0, ymax=80)
     
         output = os.path.join(d, '%s.%s.latency.stat.png' % (key, num))
         title(output)
@@ -111,5 +91,4 @@ for d in dirs:
         data, files = parse(d, dic[key], key)
 
         plot_latency(d, files, key, data)
-        plot_latency_each(d, files, key, data)
 #==================== parse data end ====================#

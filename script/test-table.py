@@ -47,9 +47,9 @@ for j in range(repeat):
         print 'i =', i
         run_multi(table.query, (size, i), '%d.query' % j, i, n_data)
 
-    if not run(table.deleteAll):
+    if not run(table.deleteAll, (task,)):
         error('deleteAll failed')
     if task:
-        sleep(600)
+        sleep(1800)
 #======================= test end =======================#
 
