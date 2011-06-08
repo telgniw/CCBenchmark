@@ -29,7 +29,7 @@ public class InitServlet extends HttpServlet {
             String objName = getCachedObjName(String.valueOf(i));
             if(!memcache.contains(objName)) {
                 byte[] blob = getRandomBlob(size);
-                memcache.put(objName, blob, Expiration.byDeltaSeconds(3600));
+                memcache.put(objName, blob, Expiration.byDeltaSeconds(86400));
             }
         }
         response.getWriter().format("myblob init %s NUM(%d) SIZE(%d)", new Object[]{

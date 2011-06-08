@@ -3,6 +3,7 @@
  */
 package benchmark;
 
+import benchmark.storage.ActionStatus;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,8 +24,8 @@ public class NewTaskServlet extends HttpServlet {
         String url = request.getParameter("url");
         Queue queue = QueueFactory.getDefaultQueue();
         queue.add(withUrl(url).method(Method.GET));
-        response.getWriter().format("newtask URL(%s)", new Object[]{
-            url
+        response.getWriter().format("newtask URL(%s) %s", new Object[]{
+            url, ActionStatus.SUCCESS
         });
     }
 

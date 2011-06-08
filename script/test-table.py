@@ -50,6 +50,6 @@ for j in range(repeat):
     if not run(table.deleteAll, (task,)):
         error('deleteAll failed')
     if task:
-        sleep(1800)
+        sleep(600)
 #======================= test end =======================#
 

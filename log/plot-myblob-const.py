@@ -39,41 +39,40 @@ def parse(d, files, key):
             all_data[-1].append(data)
     return all_data, dic
 
-def plot_latency(d, files, key, all_data):
+def hist_latency(d, files, key, all_data):
     gcf().clf()
     gcf().set_size_inches(8, 6)
 
     def expand(d):
         return [d[1]-d[0], d[2]-d[1]]
 
-    data = []
+    li = []
     for i, num in enumerate(files):
-        for d in all_data[i]:
-            data += d
-    datb = map(expand, data)
-    t = zip(*datb)
+        for data in all_data[i]:
+            li += data
+    t = zip(*map(expand, li))
     h0 = hist(t[0], bins=100, cumulative=True, histtype='step', color='r')
     h1 = hist(t[1], bins=100, cumulative=True, histtype='step', color='m')
 
-    xlabel('latency' % key)
+    xlabel('latency (ms)')
     ylabel('cumulative # data')
     
     output = os.path.join(d, '%s.latency.hist.png' % key)
     title(output)
     savefig(output, format='PNG')
 
-def plot_finish_time(d, files, key, all_data):
+def hist_finish_time(d, files, key, all_data):
     gcf().clf()
     gcf().set_size_inches(8, 6)
 
-    data = []
+    li = []
     for i, num in enumerate(files):
-        for d in all_data[i]:
-            mi = min(zip(*d))
-            data += [t[2]-mi for t in d]
+        for data in all_data[i]:
+            mi = min(zip(*data))
+            li += [t[2]-mi for t in data]
     h0 = hist(data, bins=100, cumulative=True, histtype='step', color='r')
 
-    xlabel('relative finish time' % key)
+    xlabel('relative finish time (ms)')
     ylabel('cumulative # data')
 
     output = os.path.join(d, '%s.finish.hist.png' % key)
@@ -103,6 +102,6 @@ for d in dirs:
         dic[key].sort(fname_cmp)
         data, files = parse(d, dic[key], key)
 
-        plot_latency(d, files, key, data)
-        plot_finish_time(d, files, key, data)
+        hist_latency(d, files, key, data)
+        hist_finish_time(d, files, key, data)
 #==================== parse data end ====================#

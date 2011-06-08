@@ -48,6 +48,6 @@ for i in range(off_t, num+1, off_t):
         if not run(myblob.deleteAll, (task,)):
             error('deleteAll failed')
         if task:
-            sleep(1800)
+            sleep(600)
 #======================= test end =======================#
 

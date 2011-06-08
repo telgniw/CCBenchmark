@@ -59,13 +59,39 @@ def plot_latency(d, files, key, all_data):
             't0~t1: avg=%.0f dev=%.0f' % (avg(t[0]), dev(t[0])),
             't1~t2: avg=%.0f dev=%.0f' % (avg(t[1]), dev(t[1]))
         ))
-        xlabel('cumulative # data (%s)' % key)
+        xlabel('cumulative # data')
         ylabel('latency (ms)')
         ylim(ymin=0, ymax=80)
     
         output = os.path.join(d, '%s.%s.latency.stat.png' % (key, num))
         title(output)
         savefig(output, format='PNG')
+
+def hist_latency(d, files, key, all_data):
+    gcf().clf()
+    gcf().set_size_inches(8, 6)
+
+    def expand(d):
+        return [d[1]-d[0], d[2]-d[0]]
+
+    li = []
+    for i, num in enumerate(files):
+        for data in all_data[i]:
+            li += data
+    t = zip(*map(expand, li))
+    h0 = hist(t[0], bins=100, normed=True, range=[0, 100],
+        cumulative=True, histtype='step', color='r', label='t0~t1')
+    h1 = hist(t[1], bins=100, normed=True, range=[0, 100],
+        cumulative=True, histtype='step', color='m', label='t0~t2')
+
+    legend()
+    xlabel('latency (ms)')
+    ylabel('cumulative # data')
+    ylim(ymin=0, ymax=1)
+
+    output = os.path.join(d, '%s.latency.hist.png' % key)
+    title(output)
+    savefig(output, format='PNG')
 
 #=================== parse data begin ===================#
 for dummy, dirs, dummy in os.walk(log_dir):
@@ -91,4 +117,5 @@ for d in dirs:
         data, files = parse(d, dic[key], key)
 
         plot_latency(d, files, key, data)
+        hist_latency(d, files, key, data)
 #==================== parse data end ====================#
