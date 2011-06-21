@@ -107,12 +107,12 @@ for dummy, dirs, dummy in os.walk(log_dir):
 
 os.chdir(log_dir)
 
-dic = {}
 for d in dirs:
     if not 'table' in d:
         continue
     for dummy, dummy, files in os.walk(d):
         break
+    dic = {}
     for f in files:
         key, ext = f.split('.')[-2:]
         if ext != 'log':
