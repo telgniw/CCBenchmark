@@ -27,12 +27,12 @@ public class DownloadServlet extends HttpServlet {
         try {
             query.setFilter("name == blobName");
             query.declareParameters("String blobName");
+            long t2 = System.currentTimeMillis();
             List<MyBlobInfo> list = (List<MyBlobInfo>) query.execute(name);
             MyBlobInfo blobInfo = list.get(0);
-            long t2 = System.currentTimeMillis();
             Blob blob = blobInfo.getBlob();
-            response.setStatus(HttpServletResponse.SC_FOUND);
             long t3 = System.currentTimeMillis();
+            response.setStatus(HttpServletResponse.SC_FOUND);
             response.getWriter().format("myblob download %s %s %d %d %d", new Object[]{
                 ActionStatus.SUCCESS, name, t1, t2, t3
             });

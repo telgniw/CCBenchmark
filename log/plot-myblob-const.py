@@ -13,7 +13,7 @@ try:
     os.stat(log_dir)
 except OSError as e:
     error(e)
-except ValueError:
+except (ValueError, IndexError):
     usage()
 #==================== parse argv end ====================#
 
@@ -32,7 +32,12 @@ def parse(d, files, key):
             with open(os.path.join(d, f)) as fin:
                 lines = fin.readlines()
             try:
-                data = [map(int, l.split()[-3:]) for l in lines]
+                data = []
+                for l in lines:
+                    t = map(int, l.split()[-3:])
+                    if len(t) < 3:
+                        continue
+                    data.append(t)
             except ValueError as e:
                 print '%s:' % os.path.join(d, f), e
                 continue
@@ -44,18 +49,20 @@ def hist_latency(d, files, key, all_data):
     gcf().set_size_inches(8, 6)
 
     def expand(d):
-        return [d[1]-d[0], d[2]-d[1]]
+        return d[2]-d[1]
 
     li = []
     for i, num in enumerate(files):
         for data in all_data[i]:
             li += data
-    t = zip(*map(expand, li))
-    h0 = hist(t[0], bins=100, cumulative=True, histtype='step', color='r')
-    h1 = hist(t[1], bins=100, cumulative=True, histtype='step', color='m')
+    t = map(expand, li)
+    hist(t, bins=100000, normed=True, cumulative=True, histtype='step', color='m',
+        label='t1~t2: avg=%.0f dev=%.0f' % (avg(t), dev(t)))
 
-    xlabel('latency (ms)')
+    legend(loc='lower right')
+    xlabel('time (ms)')
     ylabel('cumulative # data')
+    xscale('log'), xlim(xmax=max(t)), ylim([0, 1])
     
     output = os.path.join(d, '%s.latency.hist.png' % key)
     title(output)
@@ -68,12 +75,15 @@ def hist_finish_time(d, files, key, all_data):
     li = []
     for i, num in enumerate(files):
         for data in all_data[i]:
-            mi = min(zip(*data))
+            mi = min(zip(*data)[0])
             li += [t[2]-mi for t in data]
-    h0 = hist(data, bins=100, cumulative=True, histtype='step', color='r')
+    hist(li, bins=100000, normed=True, cumulative=True, histtype='step', color='r',
+        label='finish time')
 
-    xlabel('relative finish time (ms)')
+    legend(loc='lower right')
+    xlabel('time (ms)')
     ylabel('cumulative # data')
+    xscale('log'), xlim(xmax=max(li)), ylim([0, 1])
 
     output = os.path.join(d, '%s.finish.hist.png' % key)
     title(output)
@@ -87,7 +97,7 @@ os.chdir(log_dir)
 
 dic = {}
 for d in dirs:
-    if not 'myblob' in d:
+    if not 'myblob-c' in d:
         continue
     for dummy, dummy, files in os.walk(d):
         break

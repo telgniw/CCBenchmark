@@ -13,7 +13,7 @@ try:
     os.stat(log_dir)
 except OSError as e:
     error(e)
-except ValueError:
+except (ValueError, IndexError):
     usage()
 #==================== parse argv end ====================#
 
@@ -32,7 +32,12 @@ def parse(d, files, key):
             with open(os.path.join(d, f)) as fin:
                 lines = fin.readlines()
             try:
-                data = [map(int, l.split()[-3:]) for l in lines]
+                data = []
+                for l in lines:
+                    t = map(int, l.split()[-3:])
+                    if len(t) < 3:
+                        continue
+                    data.append(t)
             except ValueError as e:
                 print '%s:' % os.path.join(d, f), e
                 continue
@@ -44,28 +49,31 @@ def plot_latency(d, files, key, all_data):
         return [d[1]-d[0], d[2]-d[1]]
 
     for i, num in enumerate(files):
-        gcf().clf()
-        gcf().set_size_inches(16, 6)
+        try:
+            gcf().clf()
+            gcf().set_size_inches(16, 6)
 
-        li = []
-        for data in all_data[i]:
-            datb = map(expand, data)
-            li += datb
-        t, r = zip(*li), range(len(li))
-        b0 = bar(r, t[0], color='b', linewidth=0)
-        b1 = bar(r, t[1], color='c', bottom=t[0], linewidth=0)
+            li = []
+            for data in all_data[i]:
+                datb = map(expand, data)
+                li += datb
+            t, r = zip(*li), range(len(li))
+            bar(r, t[0], color='b', linewidth=0,
+                label='t0~t1: avg=%.0f dev=%.0f' % (avg(t[0]), dev(t[0])))
+            bar(r, t[1], color='c', bottom=t[0], linewidth=0,
+                label='t1~t2: avg=%.0f dev=%.0f' % (avg(t[1]), dev(t[1])))
 
-        legend((b0[0], b1[0]), (
-            't0~t1: avg=%.0f dev=%.0f' % (avg(t[0]), dev(t[0])),
-            't1~t2: avg=%.0f dev=%.0f' % (avg(t[1]), dev(t[1]))
-        ))
-        xlabel('cumulative # data')
-        ylabel('latency (ms)')
-        ylim(ymin=0, ymax=80)
+            legend(loc='upper right')
+            xlabel('cumulative # data')
+            ylabel('latency (ms)')
+            ylim(ymin=0, ymax=80)
     
-        output = os.path.join(d, '%s.%s.latency.stat.png' % (key, num))
-        title(output)
-        savefig(output, format='PNG')
+            output = os.path.join(d, '%s.%s.latency.stat.png' % (key, num))
+            title(output)
+            savefig(output, format='PNG')
+        except IndexError as e:
+            print 'num=%s:' % num, e
+            continue
 
 def hist_latency(d, files, key, all_data):
     gcf().clf()
@@ -79,12 +87,12 @@ def hist_latency(d, files, key, all_data):
         for data in all_data[i]:
             li += data
     t = zip(*map(expand, li))
-    h0 = hist(t[0], bins=100, normed=True, range=[0, 100],
-        cumulative=True, histtype='step', color='r', label='t0~t1')
-    h1 = hist(t[1], bins=100, normed=True, range=[0, 100],
-        cumulative=True, histtype='step', color='m', label='t0~t2')
+    hist(t[0], bins=100, normed=True, range=[0, 100], color='r', histtype='step',
+        cumulative=True, label='t0~t1: avg=%.0f dev=%.0f' % (avg(t[0]), dev(t[0])))
+    hist(t[1], bins=100, normed=True, range=[0, 100], color='m', histtype='step',
+        cumulative=True, label='t0~t2: avg=%.0f dev=%.0f' % (avg(t[1]), dev(t[1])))
 
-    legend()
+    legend(loc='lower right')
     xlabel('latency (ms)')
     ylabel('cumulative # data')
     ylim(ymin=0, ymax=1)

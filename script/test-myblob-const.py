@@ -4,13 +4,13 @@ from time import sleep
 import myblob, sys, os
 
 def usage():
-    print sys.argv[0], '<log_dir>', '<num>', '<size>', '<n_test>', '<repeat>'
+    print sys.argv[0], '<log_dir>', '<task>', '<num>', '<size>', '<n_test>', '<repeat>'
     exit(1)
 
 #=================== parse argv begin ===================#
 try:
-    log_dir = sys.argv[1]
-    num, size, n_test, repeat = [int(t) for t in sys.argv[2:]]
+    log_dir, task = sys.argv[1], bool(int(sys.argv[2]))
+    num, size, n_test, repeat = [int(t) for t in sys.argv[3:]]
     os.mkdir(log_dir)
 except OSError as e:
     error(e)
@@ -32,7 +32,7 @@ def run_multi(func, name, i):
     del log
 
 #====================== test begin ======================#
-task = True
+print 'task =', task
 
 if not run(myblob.init, (num, size, task)):
     run(myblob.deleteAll, (task,))
@@ -40,7 +40,7 @@ if not run(myblob.init, (num, size, task)):
 if task:
     sleep(600)
 
-for i in range(n_test):
+for i in range(1, n_test+1, 1):
     print 'i =', i
     for j in range(repeat):
         run_multi(myblob.upload, '%d.upload' % j, i)
