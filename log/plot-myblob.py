@@ -84,13 +84,14 @@ def plot_throughput(d, files, key, all_data):
 
     li, throu = [], []
     for i, num in enumerate(files):
-        left = len(li)
+        left, t_li = len(li), []
         for data in all_data[i]:
             t = zip(*data)
-            li.append((max(t[2])-min(t[0]))/len(data))
+            t_li.append((max(t[2])-min(t[0]))/len(data))
+        li += t_li
+        throu.append(avg(t_li))
         right = len(li)
         axvspan(left, right, facecolor='y', alpha=0.25*(i%2+1))
-        throu.append(avg(li))
     total = len(li)
     r = range(total)
     bar(r, li, color='m', label='throughput per test')
