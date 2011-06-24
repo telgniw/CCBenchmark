@@ -43,8 +43,8 @@ if task:
 for i in range(1, n_test+1, 1):
     print 'i =', i
     for j in range(repeat):
-        run_multi(myblob.upload, '%d.upload' % j, i)
-        run_multi(myblob.download, '%d.download' % j, i)
+        run_multi(myblob.upload, '%d.upload' % j, num)
+        run_multi(myblob.download, '%d.download' % j, num)
         if not run(myblob.deleteAll, (task,)):
             error('deleteAll failed')
         if task:
